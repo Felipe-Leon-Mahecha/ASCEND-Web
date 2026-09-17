@@ -31,14 +31,43 @@ const heroShots = [
   { img: `${photoPath}hero-3.jpg`, label: 'Pestañas', icon: 'lucide:eye', grad: 'linear-gradient(150deg,#141414 0%,#5F6F66 55%,#C9D8CF 100%)' },
 ];
 
-const services = [
-  { id: 'manicure', icon: 'lucide:hand', name: 'Manicure tradicional', price: '$25.000', desc: 'Limpieza profunda, cutícula y esmaltado clásico.', dur: 45, time: '45 min' },
-  { id: 'semipermanente', icon: 'lucide:sparkles', name: 'Semipermanente', price: '$45.000', desc: 'Color parejo y brillo que aguanta hasta 3 semanas.', dur: 60, time: '1 h', hot: true },
-  { id: 'acrilicas', icon: 'lucide:gem', name: 'Acrílicas y press-on', price: '$70.000', desc: 'Extensión, esculpidas o press-on con el largo que quieras.', dur: 120, time: '2 h' },
-  { id: 'pedicure', icon: 'lucide:footprints', name: 'Pedicure spa', price: '$50.000', desc: 'Exfoliación, masaje y esmaltado para pies descansados.', dur: 60, time: '1 h' },
-  { id: 'cejas', icon: 'lucide:scan-face', name: 'Diseño de cejas', price: '$25.000', desc: 'Visagismo, depilación y laminado según tu rostro.', dur: 45, time: '45 min' },
-  { id: 'pestanas', icon: 'lucide:eye', name: 'Pestañas', price: '$75.000', desc: 'Lifting o extensiones pelo a pelo, efecto natural.', dur: 90, time: '1 h 30 min' },
+const serviceGroups = [
+  {
+    cat: 'Uñas · Esculpidas y técnicas',
+    items: [
+      { id: 'esmaltado-tradicional', icon: 'lucide:palette', name: 'Esmaltado tradicional', price: 'Desde $25.000', desc: 'Esmaltado clásico con acabado prolijo.', dur: 45, time: '45 min' },
+      { id: 'semipermanente', icon: 'lucide:sparkles', name: 'Esmaltado semipermanente', price: '$45.000', desc: 'Brillo parejo que dura 3 semanas.', dur: 60, time: '1 h', hot: true },
+      { id: 'builder-gel', icon: 'lucide:layers', name: 'Técnica builder gel', price: 'Desde $65.000', desc: 'Nivelación y refuerzo sin extensión.', dur: 90, time: '1 h 30 min' },
+      { id: 'softgel', icon: 'lucide:gem', name: 'Técnica softgel', price: 'Desde $70.000', desc: 'Tips flexibles con acabado natural.', dur: 90, time: '1 h 30 min' },
+      { id: 'polygel', icon: 'lucide:diamond', name: 'Uña esculpida Polygel', price: 'Desde $75.000', desc: 'Esculpida moldeable y liviana.', dur: 120, time: '2 h' },
+      { id: 'acrilico', icon: 'lucide:hammer', name: 'Uña esculpida acrílico', price: '$75.000', desc: 'Estructura fuerte para uñas largas.', dur: 120, time: '2 h' },
+      { id: 'hiperrealistas', icon: 'lucide:wand-2', name: 'Uñas híperrealistas', price: 'Desde $85.000', desc: 'Arte detallado efecto ultra realista.', dur: 120, time: '2 h' },
+      { id: 'hibrido', icon: 'lucide:combine', name: 'Sistema híbrido', price: 'Desde $75.000', desc: 'Combina acrílico y gel según tu uña.', dur: 120, time: '2 h' },
+      { id: 'sandwich', icon: 'lucide:layers-3', name: 'Técnica sándwich', price: 'Desde $70.000', desc: 'Capas que encapsulan color y diseño.', dur: 90, time: '1 h 30 min' },
+    ],
+  },
+  {
+    cat: 'Spa · Manos y pies',
+    items: [
+      { id: 'pedicura', icon: 'lucide:footprints', name: 'Pedicura tradicional / semi / pedispa', price: 'Desde $35.000', desc: 'Limpieza, esmaltado y spa relajante.', dur: 60, time: '1 h' },
+      { id: 'parafina', icon: 'lucide:droplets', name: 'Tratamiento de parafina', price: '$20.000', desc: 'Hidratación profunda en manos y pies.', dur: 30, time: '30 min' },
+    ],
+  },
+  {
+    cat: 'Mirada · Cejas y pestañas',
+    items: [
+      { id: 'punto-a-punto', icon: 'lucide:eye', name: 'Pestañas punto a punto', price: 'Desde $55.000', desc: 'Grupitos para volumen express.', dur: 60, time: '1 h' },
+      { id: 'lifting', icon: 'lucide:scan', name: 'Lifting de pestañas', price: '$60.000', desc: 'Curva natural sin extensiones.', dur: 60, time: '1 h' },
+      { id: 'cejas-diseno', icon: 'lucide:scan-face', name: 'Diseño de cejas', price: '$25.000', desc: 'Visagismo según tu rostro.', dur: 30, time: '30 min' },
+      { id: 'pigmentacion', icon: 'lucide:brush', name: 'Pigmentación de cejas', price: '$35.000', desc: 'Color suave que dura semanas.', dur: 45, time: '45 min' },
+    ],
+  },
+  {
+    cat: 'Corporal',
+    items: [{ id: 'depilacion', icon: 'lucide:sparkles', name: 'Depilación corporal', price: 'Desde $20.000', desc: 'Zona a elegir con cera profesional.', dur: 30, time: '30 min' }],
+  },
 ];
+const services = serviceGroups.flatMap((g) => g.items);
 
 const slots = [
   { v: '09:00', label: '9:00 am' },
@@ -249,40 +278,45 @@ const jsonLd = {
         </p>
       </div>
 
-      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {services.map((s) => (
-          <div
-            class="group relative flex flex-col rounded-3xl border p-7 transition-transform duration-300 hover:-translate-y-1"
-            style={`background:${base}; border-color:rgba(20,20,20,0.08)`}
-          >
-            {s.hot && (
-              <span
-                class="absolute -top-3 right-6 rounded-full px-3 py-1 text-[11px] font-bold text-[#141414]"
-                style={`background:${coral}`}
+      {serviceGroups.map((group) => (
+        <div class="mt-12">
+          <h3 class="font-mono text-xs font-bold tracking-[0.18em] uppercase text-[#141414]/45">{group.cat}</h3>
+          <div class="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {group.items.map((s) => (
+              <div
+                class="group relative flex flex-col rounded-3xl border p-7 transition-transform duration-300 hover:-translate-y-1"
+                style={`background:${base}; border-color:rgba(20,20,20,0.08)`}
               >
-                Más pedido
-              </span>
-            )}
-            <Icon name={s.icon} width={26} height={26} class="h-6.5 w-6.5" style={`color:${accentDeep}`} />
-            <h3 class="mt-5 font-display text-xl font-bold text-[#141414]">{s.name}</h3>
-            <p class="mt-2 flex-1 text-sm leading-relaxed text-[#141414]/60">{s.desc}</p>
-            <div class="mt-6 flex items-end justify-between gap-3">
-              <span class="font-display text-2xl font-bold text-[#141414]">{s.price}</span>
-              <span class="text-xs text-[#141414]/45">{s.time}</span>
-            </div>
-            <a
-              href={whatsappLink(`Hola Francy, quiero agendar ${s.name} (${s.price}). ¿Qué horarios tienes libres?`, FRANCY.whatsapp)}
-              target="_blank"
-              rel="noopener"
-              class="mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
-              style={`background:${accent}`}
-            >
-              <WhatsAppIcon width={16} height={16} class="h-4 w-4" />
-              Agendar este servicio
-            </a>
+                {(s as any).hot && (
+                  <span
+                    class="absolute -top-3 right-6 rounded-full px-3 py-1 text-[11px] font-bold text-[#141414]"
+                    style={`background:${coral}`}
+                  >
+                    Más pedido
+                  </span>
+                )}
+                <Icon name={s.icon} width={26} height={26} class="h-6.5 w-6.5" style={`color:${accentDeep}`} />
+                <h4 class="mt-5 font-display text-lg font-bold text-[#141414]">{s.name}</h4>
+                <p class="mt-2 flex-1 text-sm leading-relaxed text-[#141414]/60">{s.desc}</p>
+                <div class="mt-6 flex items-end justify-between gap-3">
+                  <span class="font-display text-xl font-bold text-[#141414]">{s.price}</span>
+                  <span class="text-xs text-[#141414]/45">{s.time}</span>
+                </div>
+                <a
+                  href={whatsappLink(`Hola Francy, quiero agendar ${s.name} (${s.price}). ¿Qué horarios tienes libres?`, FRANCY.whatsapp)}
+                  target="_blank"
+                  rel="noopener"
+                  class="mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
+                  style={`background:${accent}`}
+                >
+                  <WhatsAppIcon width={16} height={16} class="h-4 w-4" />
+                  Agendar
+                </a>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   </section>
 
