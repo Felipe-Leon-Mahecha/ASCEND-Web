@@ -7,6 +7,7 @@ import MercadosDemo from '../../components/demos/MercadosDemo.astro';
 import VeterinariaDemo from '../../components/demos/VeterinariaDemo.astro';
 import UnasDemo from '../../components/demos/UnasDemo.astro';
 import RestauranteDemo from '../../components/demos/RestauranteDemo.astro';
+import FrancyDemo from '../../components/demos/FrancyDemo.astro';
 
 export async function getStaticPaths() {
   const demos = await getCollection('demos');
@@ -24,15 +25,14 @@ const demoComponents = {
   veterinaria: VeterinariaDemo,
   unas: UnasDemo,
   restaurante: RestauranteDemo,
+  francy: FrancyDemo,
 } as const;
 
 const Demo = demoComponents[demo.data.slug as keyof typeof demoComponents];
-const subtitle = demo.data.tagline;
+const subtitle = demo.data.seoDescription ?? demo.data.tagline;
+const pageTitle = demo.data.seoTitle ?? `${demo.data.title} — ${demo.data.industry} | Web demo`;
 ---
 
-<DemoLayout
-  title={`${demo.data.title} — ${demo.data.industry} | Web demo`}
-  description={subtitle}
->
+<DemoLayout title={pageTitle} description={subtitle} image={demo.data.ogImage}>
   {Demo && <Demo />}
 </DemoLayout>

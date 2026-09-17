@@ -1,0 +1,1323 @@
+---
+import DemoStrip from './DemoStrip.astro';
+import DemoHeader from './DemoHeader.astro';
+import DemoHero from './DemoHero.astro';
+import DemoFooter from './DemoFooter.astro';
+import WhatsAppIcon from '../ui/WhatsAppIcon.astro';
+import { whatsappLink } from '../../lib/site';
+import { Icon } from 'astro-icon/components';
+import { FRANCY } from '../../lib/francy';
+
+const ocupadasGlob = import.meta.glob<{ default: Record<string, string[]> }>(
+  '../../data/francy-ocupadas.json',
+  { eager: true }
+);
+const ocupadas: Record<string, string[]> = Object.values(ocupadasGlob)[0]?.default ?? {};
+
+const accent = '#8BA99A';
+const accentDeep = 'color-mix(in srgb, #8BA99A 60%, #141414)';
+const coral = '#E8A090';
+const base = '#F5F0E8';
+const surface = '#FFFFFF';
+const tier = 'premium';
+
+const photoPath = '/clientes/francy/';
+
+const wa = whatsappLink('Hola Francy, quiero agendar una cita en el estudio. ¿Me cuentas la disponibilidad?', FRANCY.whatsapp);
+
+const heroShots = [
+  { img: `${photoPath}hero-1.jpg`, label: 'Semipermanente', icon: 'lucide:sparkles', grad: 'linear-gradient(150deg,#8BA99A 0%,#C9D8CF 60%,#F5F0E8 100%)' },
+  { img: `${photoPath}hero-2.jpg`, label: 'Acrílicas', icon: 'lucide:gem', grad: 'linear-gradient(150deg,#E8A090 0%,#F1CFC4 55%,#F5F0E8 100%)' },
+  { img: `${photoPath}hero-3.jpg`, label: 'Pestañas', icon: 'lucide:eye', grad: 'linear-gradient(150deg,#141414 0%,#5F6F66 55%,#C9D8CF 100%)' },
+];
+
+const services = [
+  { id: 'manicure', icon: 'lucide:hand', name: 'Manicure tradicional', price: '$25.000', desc: 'Limpieza profunda, cutícula y esmaltado clásico.', dur: 45, time: '45 min' },
+  { id: 'semipermanente', icon: 'lucide:sparkles', name: 'Semipermanente', price: '$45.000', desc: 'Color parejo y brillo que aguanta hasta 3 semanas.', dur: 60, time: '1 h', hot: true },
+  { id: 'acrilicas', icon: 'lucide:gem', name: 'Acrílicas y press-on', price: '$70.000', desc: 'Extensión, esculpidas o press-on con el largo que quieras.', dur: 120, time: '2 h' },
+  { id: 'pedicure', icon: 'lucide:footprints', name: 'Pedicure spa', price: '$50.000', desc: 'Exfoliación, masaje y esmaltado para pies descansados.', dur: 60, time: '1 h' },
+  { id: 'cejas', icon: 'lucide:scan-face', name: 'Diseño de cejas', price: '$25.000', desc: 'Visagismo, depilación y laminado según tu rostro.', dur: 45, time: '45 min' },
+  { id: 'pestanas', icon: 'lucide:eye', name: 'Pestañas', price: '$75.000', desc: 'Lifting o extensiones pelo a pelo, efecto natural.', dur: 90, time: '1 h 30 min' },
+];
+
+const slots = [
+  { v: '09:00', label: '9:00 am' },
+  { v: '10:00', label: '10:00 am' },
+  { v: '11:30', label: '11:30 am' },
+  { v: '14:00', label: '2:00 pm' },
+  { v: '15:30', label: '3:30 pm' },
+  { v: '16:30', label: '4:30 pm' },
+];
+
+const cierre = FRANCY.closing;
+
+const gallery = [
+  { img: `${photoPath}galeria-1.jpg`, cat: 'semipermanente', alt: 'Uñas semipermanentes en tono nude', grad: 'linear-gradient(140deg,#F1CFC4,#E8A090)' },
+  { img: `${photoPath}galeria-2.jpg`, cat: 'acrilicas', alt: 'Uñas acrílicas almendra con francés', grad: 'linear-gradient(140deg,#C9D8CF,#8BA99A)' },
+  { img: `${photoPath}galeria-3.jpg`, cat: 'cejas', alt: 'Cejas laminadas con diseño natural', grad: 'linear-gradient(140deg,#E9E3D8,#B9A894)' },
+  { img: `${photoPath}galeria-4.jpg`, cat: 'semipermanente', alt: 'Semipermanente con detalles dorados', grad: 'linear-gradient(140deg,#F5F0E8,#C9D8CF)' },
+  { img: `${photoPath}galeria-5.jpg`, cat: 'acrilicas', alt: 'Acrílicas largas con encapsulado', grad: 'linear-gradient(140deg,#8BA99A,#5F6F66)' },
+  { img: `${photoPath}galeria-6.jpg`, cat: 'cejas', alt: 'Extensiones de pestañas efecto rímel', grad: 'linear-gradient(140deg,#141414,#5F6F66)' },
+  { img: `${photoPath}galeria-7.jpg`, cat: 'semipermanente', alt: 'Manicure ruso con esmalte rosado', grad: 'linear-gradient(140deg,#F1CFC4,#C9D8CF)' },
+  { img: `${photoPath}galeria-8.jpg`, cat: 'acrilicas', alt: 'Press-on con arte a mano alzada', grad: 'linear-gradient(140deg,#E8A090,#8BA99A)' },
+];
+
+const filters = [
+  { id: 'todas', label: 'Todas' },
+  { id: 'semipermanente', label: 'Semipermanente' },
+  { id: 'acrilicas', label: 'Acrílicas' },
+  { id: 'cejas', label: 'Cejas y pestañas' },
+];
+
+const products = [
+  { img: `${photoPath}producto-base-titanio.jpg`, name: "Base Uñas de Titanio Chic's", price: '$32.000', desc: 'Base fortalecedora que evita que la uña natural se quiebre.', grad: 'linear-gradient(150deg,#C9D8CF,#8BA99A)' },
+  { img: `${photoPath}producto-oleo-organic.jpg`, name: 'Óleo de cutícula Organic', price: '$18.000', desc: 'Aceite nutritivo para cutícula seca. Uso diario.', grad: 'linear-gradient(150deg,#F1CFC4,#E8A090)' },
+  { img: `${photoPath}producto-smoothie-mara.jpg`, name: 'Smoothie Mara 350 ml', price: '$38.000', desc: 'Crema corporal humectante de absorción rápida.', grad: 'linear-gradient(150deg,#F5F0E8,#B9A894)' },
+  { img: `${photoPath}producto-serum-bioaqua.jpg`, name: 'Sérum BIOAQUA para pestañas', price: '$25.000', desc: 'Sérum de crecimiento para pestañas y cejas.', grad: 'linear-gradient(150deg,#5F6F66,#141414)' },
+];
+
+const values = [
+  { icon: 'lucide:shield-check', title: 'Bioseguridad real', desc: 'Material esterilizado y limas personales para cada clienta.' },
+  { icon: 'lucide:heart-handshake', title: 'Trato cercano', desc: 'Te escucho antes de empezar y trabajamos el diseño juntas.' },
+  { icon: 'lucide:award', title: 'Producto profesional', desc: 'Marcas certificadas para que el trabajo dure lo que promete.' },
+];
+
+const testimonials = [
+  { text: 'Me hice semipermanente y llegué a las tres semanas sin un solo levantamiento. Francy tiene una mano increíble.', name: 'Laura M.', tag: 'Semipermanente' },
+  { text: 'Las cejas me cambiaron la cara. Me explicó qué forma me servía y quedaron perfectas.', name: 'Yuli C.', tag: 'Diseño de cejas' },
+  { text: 'El estudio es súper limpio y tranquilo. Salgo de ahí como si hubiera ido a un spa.', name: 'Daniela R.', tag: 'Pedicure spa' },
+];
+
+
+const faqs = [
+  { q: '¿Necesito agendar o puedo llegar directo?', a: 'Trabajo con cita para dedicarle el tiempo completo a cada clienta. Escríbeme por WhatsApp y te paso los cupos libres de la semana.' },
+  { q: '¿Cuánto dura el semipermanente?', a: 'Entre 3 y 4 semanas si sigues el cuidado que te explico al final del servicio. El retiro siempre se hace con torno, nunca halando.' },
+  { q: '¿Puedo llevar mi propio diseño?', a: 'Claro. Llega con la foto de referencia y la adaptamos al largo y la forma que mejor le quede a tus manos.' },
+  { q: '¿Qué formas de pago reciben?', a: 'Efectivo, Nequi, Daviplata y transferencia Bancolombia. El pago va al terminar el servicio.' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NailSalon',
+  '@id': `${FRANCY.url}#negocio`,
+  name: FRANCY.name,
+  description: FRANCY.seoDescription,
+  url: FRANCY.url,
+  telephone: FRANCY.phoneE164,
+  priceRange: FRANCY.priceRange,
+  currenciesAccepted: FRANCY.currency,
+  paymentAccepted: 'Efectivo, Nequi, Daviplata, transferencia bancaria',
+  image: `${photoPath}francy.jpg`,
+  logo: `${photoPath}logo.png`,
+  areaServed: [
+    { '@type': 'City', name: 'Paipa' },
+    { '@type': 'City', name: 'Duitama' },
+    { '@type': 'City', name: 'Sogamoso' },
+  ],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: FRANCY.street,
+    addressLocality: FRANCY.city,
+    addressRegion: FRANCY.region,
+    postalCode: FRANCY.postalCode,
+    addressCountry: FRANCY.country,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: FRANCY.geo.lat,
+    longitude: FRANCY.geo.lng,
+  },
+  openingHoursSpecification: FRANCY.hours
+    .filter((h) => h.days.length > 0)
+    .map((h) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: h.days,
+      opens: h.opens,
+      closes: h.closes,
+    })),
+  sameAs: [
+    `https://www.instagram.com/${FRANCY.instagram}`,
+    `https://www.tiktok.com/@${FRANCY.tiktok}`,
+  ],
+  potentialAction: {
+    '@type': 'ReserveAction',
+    target: `${FRANCY.url}#agenda`,
+    name: 'Agendar cita',
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios de uñas, cejas y pestañas',
+    itemListElement: services.map((s) => ({
+      '@type': 'Offer',
+      priceCurrency: FRANCY.currency,
+      price: s.price.replace(/[^0-9]/g, ''),
+      itemOffered: { '@type': 'Service', name: s.name, description: s.desc },
+    })),
+  },
+};
+---
+
+<DemoStrip slug="francy" brand="Francy Molano · Nails Studio" tier={tier} />
+
+<DemoHeader
+  brand="Francy Molano"
+  accent={accent}
+  links={[
+    { label: 'Servicios', href: '#servicios' },
+    { label: 'Galería', href: '#galeria' },
+    { label: 'Productos', href: '#productos' },
+    { label: 'Agenda', href: '#agenda' },
+  ]}
+  ctaText="Agendar cita"
+  ctaHref="#agenda"
+  light
+  showLogoPlaceholder={true}
+  logoImage="/clientes/francy/logo.png"
+/>
+
+<nav
+  data-francy-subnav
+  aria-label="Secciones"
+  class="sticky top-16 z-30 hidden border-b backdrop-blur md:block"
+  style={`background:color-mix(in srgb,${base} 92%,white); border-color:rgba(20,20,20,0.06)`}
+>
+  <div class="shell flex items-center gap-2 py-2.5">
+    {
+      [
+        { id: 'servicios', label: 'Servicios' },
+        { id: 'galeria', label: 'Galería' },
+        { id: 'antes-despues', label: 'Antes y después' },
+        { id: 'productos', label: 'Productos' },
+        { id: 'sobre', label: 'Sobre Francy' },
+        { id: 'agenda', label: 'Agenda' },
+        { id: 'ubicacion', label: 'Ubicación' },
+      ].map((s) => (
+        <a
+          href={`#${s.id}`}
+          data-subnav-link={s.id}
+          class="rounded-full px-3.5 py-1.5 text-xs font-semibold text-[#141414]/60 transition-colors"
+        >
+          {s.label}
+        </a>
+      ))
+    }
+  </div>
+</nav>
+
+<main style={`background:${base}`} data-francy>
+  <DemoHero
+    badge="Nails studio · Paipa, Boyacá"
+    titleA="Uñas profesionales"
+    titleB="en Paipa."
+    tagline="Manicure, semipermanente, acrílicas, cejas y pestañas con producto profesional y bioseguridad completa. Agenda tu cita por WhatsApp y te confirmo el mismo día."
+    accent={accent}
+    palette={[base, '#C9D8CF']}
+    ctaText="Agendar cita"
+    ctaHref="#agenda"
+    secondaryText="Ver trabajos"
+    secondaryHref="#galeria"
+    meta={['Cita confirmada por WhatsApp', 'Material esterilizado', 'Parqueadero cerca']}
+  />
+
+  <section class="pb-24">
+    <div class="shell grid gap-4 sm:grid-cols-3">
+      {heroShots.map((s) => (
+        <figure class="relative aspect-[4/5] overflow-hidden rounded-3xl" style={`background:${s.grad}`}>
+          <img
+            src={s.img}
+            alt={`Trabajo de ${s.label} en Francy Molano Nails Studio`}
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 h-full w-full object-cover"
+            data-fallback-img
+          />
+          <figcaption class="absolute inset-x-0 bottom-0 flex items-center gap-2 p-5 text-sm font-semibold text-white" style="background:linear-gradient(to top,rgba(20,20,20,0.55),transparent)">
+            <Icon name={s.icon} width={16} height={16} class="h-4 w-4" />
+            {s.label}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+
+  <section id="servicios" class="py-24" style={`background:${surface}`}>
+    <div class="shell">
+      <div class="max-w-2xl">
+        <h2 class="display text-3xl text-[#141414] sm:text-5xl">Servicios y precios</h2>
+        <p class="mt-5 text-[#141414]/60">
+          Precios en pesos colombianos. El valor final puede variar según el largo y el diseño que escojas.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {services.map((s) => (
+          <div
+            class="group relative flex flex-col rounded-3xl border p-7 transition-transform duration-300 hover:-translate-y-1"
+            style={`background:${base}; border-color:rgba(20,20,20,0.08)`}
+          >
+            {s.hot && (
+              <span
+                class="absolute -top-3 right-6 rounded-full px-3 py-1 text-[11px] font-bold text-[#141414]"
+                style={`background:${coral}`}
+              >
+                Más pedido
+              </span>
+            )}
+            <Icon name={s.icon} width={26} height={26} class="h-6.5 w-6.5" style={`color:${accentDeep}`} />
+            <h3 class="mt-5 font-display text-xl font-bold text-[#141414]">{s.name}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-[#141414]/60">{s.desc}</p>
+            <div class="mt-6 flex items-end justify-between gap-3">
+              <span class="font-display text-2xl font-bold text-[#141414]">{s.price}</span>
+              <span class="text-xs text-[#141414]/45">{s.time}</span>
+            </div>
+            <a
+              href={whatsappLink(`Hola Francy, quiero agendar ${s.name} (${s.price}). ¿Qué horarios tienes libres?`, FRANCY.whatsapp)}
+              target="_blank"
+              rel="noopener"
+              class="mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
+              style={`background:${accent}`}
+            >
+              <WhatsAppIcon width={16} height={16} class="h-4 w-4" />
+              Agendar este servicio
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="galeria" class="py-24">
+    <div class="shell">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div class="max-w-2xl">
+          <h2 class="display text-3xl text-[#141414] sm:text-5xl">Trabajos del estudio</h2>
+          <p class="mt-5 text-[#141414]/60">Toca una foto para verla en grande.</p>
+        </div>
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrar galería">
+          {filters.map((f, i) => (
+            <button
+              type="button"
+              data-filter={f.id}
+              aria-pressed={i === 0 ? 'true' : 'false'}
+              class="rounded-full border px-4 py-2 text-sm font-semibold text-[#141414]/70 transition-colors"
+              style="border-color:rgba(20,20,20,0.12)"
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div class="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+        {gallery.map((g) => (
+          <button
+            type="button"
+            data-gallery-item
+            data-cat={g.cat}
+            data-src={g.img}
+            data-alt={g.alt}
+            class="group relative aspect-square overflow-hidden rounded-2xl"
+            style={`background:${g.grad}`}
+          >
+            <img
+              src={g.img}
+              alt={g.alt}
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-fallback-img
+            />
+            <span class="absolute inset-0 flex items-end justify-end p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+              <span class="rounded-full bg-white/90 p-2">
+                <Icon name="lucide:maximize-2" width={14} height={14} class="h-3.5 w-3.5 text-[#141414]" />
+              </span>
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <p data-gallery-empty hidden class="mt-8 text-center text-sm text-[#141414]/50">
+        Todavía no hay fotos en esta categoría.
+      </p>
+    </div>
+  </section>
+
+  <section id="antes-despues" class="py-24" style={`background:${surface}`}>
+    <div class="shell grid items-center gap-12 lg:grid-cols-2">
+      <div>
+        <h2 class="display text-3xl text-[#141414] sm:text-4xl">Cejas y pestañas: el antes y el después</h2>
+        <p class="mt-5 leading-relaxed text-[#141414]/65">
+          Arrastra el control para ver el cambio. Trabajo el diseño según la forma de tu rostro, no con plantilla.
+        </p>
+        <a
+          href={whatsappLink('Hola Francy, quiero agendar diseño de cejas. ¿Cuándo tienes cupo?', FRANCY.whatsapp)}
+          target="_blank"
+          rel="noopener"
+          class="mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3.5 font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
+          style={`background:${accent}`}
+        >
+          <WhatsAppIcon width={18} height={18} class="h-4.5 w-4.5" />
+          Agendar cejas
+        </a>
+      </div>
+
+      <div
+        data-ba
+        class="ba relative aspect-[4/3] w-full overflow-hidden rounded-3xl"
+        style="--pos:50%"
+      >
+        <div class="absolute inset-0" style="background:linear-gradient(140deg,#5F6F66,#C9D8CF)">
+          <img
+            src={`${photoPath}cejas-despues.jpg`}
+            alt="Cejas después del diseño"
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 h-full w-full object-cover"
+            data-fallback-img
+          />
+          <span class="absolute right-4 bottom-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#141414]">Después</span>
+        </div>
+
+        <div class="ba-clip absolute inset-0" style="background:linear-gradient(140deg,#B9A894,#E9E3D8)">
+          <img
+            src={`${photoPath}cejas-antes.jpg`}
+            alt="Cejas antes del diseño"
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 h-full w-full object-cover"
+            data-fallback-img
+          />
+          <span class="absolute bottom-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#141414]">Antes</span>
+        </div>
+
+        <div class="ba-line pointer-events-none absolute inset-y-0" style={`background:${surface}`}>
+          <span class="absolute top-1/2 left-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full shadow-[0_6px_18px_rgba(20,20,20,0.25)]" style={`background:${surface}`}>
+            <Icon name="lucide:move-horizontal" width={18} height={18} class="h-4.5 w-4.5 text-[#141414]" />
+          </span>
+        </div>
+
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value="50"
+          step="1"
+          data-ba-range
+          aria-label="Comparar antes y después"
+          class="ba-range absolute inset-0 h-full w-full cursor-ew-resize opacity-0"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section id="productos" class="py-24">
+    <div class="shell">
+      <div class="max-w-2xl">
+        <h2 class="display text-3xl text-[#141414] sm:text-5xl">Productos que uso y vendo</h2>
+        <p class="mt-5 text-[#141414]/60">
+          Los mismos que aplico en el estudio. Te los entrego en Paipa o los envío por servientrega.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {products.map((p) => (
+          <div class="flex flex-col overflow-hidden rounded-3xl border" style={`background:${surface}; border-color:rgba(20,20,20,0.08)`}>
+            <figure class="relative aspect-square" style={`background:${p.grad}`}>
+              <img
+                src={p.img}
+                alt={p.name}
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 h-full w-full object-cover"
+                data-fallback-img
+              />
+            </figure>
+            <div class="flex flex-1 flex-col p-6">
+              <h3 class="font-display text-base font-bold text-[#141414]">{p.name}</h3>
+              <p class="mt-2 flex-1 text-sm leading-relaxed text-[#141414]/60">{p.desc}</p>
+              <span class="mt-4 font-display text-xl font-bold text-[#141414]">{p.price}</span>
+              <a
+                href={whatsappLink(`Hola Francy, quiero pedir "${p.name}" (${p.price}). ¿Tienes disponible?`, FRANCY.whatsapp)}
+                target="_blank"
+                rel="noopener"
+                class="mt-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
+                style={`background:${accent}`}
+              >
+                <WhatsAppIcon width={16} height={16} class="h-4 w-4" />
+                Pedir por WhatsApp
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="sobre" class="py-24" style={`background:${surface}`}>
+    <div class="shell grid items-center gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]">
+      <figure class="relative aspect-[4/5] overflow-hidden rounded-3xl" style="background:linear-gradient(160deg,#8BA99A,#E9E3D8)">
+        <img
+          src={`${photoPath}francy.jpg`}
+          alt="Francy Molano en su estudio de uñas en Paipa"
+          loading="lazy"
+          decoding="async"
+          class="absolute inset-0 h-full w-full object-cover"
+          data-fallback-img
+        />
+      </figure>
+
+      <div>
+        <h2 class="display text-3xl text-[#141414] sm:text-4xl">Hola, soy Francy</h2>
+        <p class="mt-6 leading-relaxed text-[#141414]/70">
+          Llevo más de seis años haciendo uñas en Paipa. Empecé atendiendo en la sala de mi casa y hoy tengo un estudio
+          propio donde cada cita es personal: una clienta a la vez, sin afanes y con el material esterilizado delante de ti.
+        </p>
+        <p class="mt-4 leading-relaxed text-[#141414]/70">
+          Me capacito cada año en técnicas nuevas de semipermanente, acrílico y visagismo de cejas, porque lo que se ve
+          bonito el primer día tiene que seguir bien a las tres semanas.
+        </p>
+
+        <div class="mt-10 grid gap-4 sm:grid-cols-3">
+          {values.map((v) => (
+            <div class="rounded-2xl border p-5" style={`background:${base}; border-color:rgba(20,20,20,0.08)`}>
+              <Icon name={v.icon} width={22} height={22} class="h-5.5 w-5.5" style={`color:${accentDeep}`} />
+              <h3 class="mt-4 font-display text-base font-bold text-[#141414]">{v.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-[#141414]/60">{v.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="agenda" class="py-24">
+    <div class="shell max-w-3xl">
+      <div class="max-w-2xl">
+        <h2 class="display text-3xl text-[#141414] sm:text-5xl">Agenda tu cita</h2>
+        <p class="mt-5 text-[#141414]/60">
+          Escoge servicio, día y hora. Te muestro solo los cupos que tengo libres y te confirmo por WhatsApp.
+        </p>
+      </div>
+
+      <form
+        data-agenda-form
+        novalidate
+        onsubmit="return false;"
+        class="mt-12 rounded-3xl border p-6 sm:p-10"
+        style={`background:${surface}; border-color:rgba(20,20,20,0.08)`}
+        data-phone={FRANCY.whatsapp}
+        data-cierre={cierre}
+      >
+        <ol class="space-y-8">
+          <li>
+            <label for="agenda-servicio" class="flex items-center gap-3 text-sm font-bold text-[#141414]">
+              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${accent}`}>1</span>
+              ¿Qué te vas a hacer?
+            </label>
+            <select
+              id="agenda-servicio"
+              name="servicio"
+              data-agenda-servicio
+              required
+              class="mt-3 w-full rounded-2xl border px-5 py-3.5 text-sm font-medium text-[#141414] outline-none transition-colors"
+              style="border-color:rgba(20,20,20,0.12); background:#FFFFFF"
+            >
+              <option value="" disabled selected>Selecciona un servicio…</option>
+              {services.map((s) => (
+                <option value={s.name} data-price={s.price} data-dur={s.dur}>
+                  {s.name} — {s.price} · {s.time}
+                </option>
+              ))}
+            </select>
+          </li>
+
+          <li>
+            <label for="agenda-fecha" class="flex items-center gap-3 text-sm font-bold text-[#141414]">
+              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${accent}`}>2</span>
+              ¿Qué día te queda bien?
+            </label>
+            <input
+              id="agenda-fecha"
+              name="fecha"
+              type="date"
+              data-agenda-fecha
+              required
+              class="mt-3 w-full rounded-2xl border px-5 py-3.5 text-sm font-medium text-[#141414] outline-none transition-colors"
+              style="border-color:rgba(20,20,20,0.12); background:#FFFFFF"
+            />
+            <p data-agenda-domingo hidden class="mt-3 text-sm text-[#141414]/60">
+              Los domingos y festivos atiendo solo con cita especial. Escríbeme y miramos.
+            </p>
+          </li>
+
+          <li>
+            <span class="flex items-center gap-3 text-sm font-bold text-[#141414]">
+              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${accent}`}>3</span>
+              Elige la hora
+            </span>
+            <div role="radiogroup" aria-label="Hora disponible" class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {slots.map((s) => (
+                <button
+                  type="button"
+                  data-slot={s.v}
+                  aria-pressed="false"
+                  class="agenda-slot flex flex-col items-center justify-center gap-1 rounded-2xl border px-3 py-4 text-center transition-all"
+                  style="border-color:rgba(20,20,20,0.12)"
+                >
+                  <span class="agenda-slot-label font-display text-base font-bold text-[#141414]">{s.label}</span>
+                  <span class="agenda-slot-state text-[11px] font-semibold text-[#141414]/45">Disponible</span>
+                </button>
+              ))}
+            </div>
+            <input type="hidden" name="hora" data-agenda-hora value="" />
+            <p data-agenda-hint class="mt-4 text-xs text-[#141414]/50">
+              Escoge servicio y fecha para ver los cupos reales de ese día.
+            </p>
+          </li>
+
+          <li>
+            <label for="agenda-nombre" class="flex items-center gap-3 text-sm font-bold text-[#141414]">
+              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${accent}`}>4</span>
+              ¿Cómo te llamas?
+            </label>
+            <input
+              id="agenda-nombre"
+              name="nombre"
+              type="text"
+              autocomplete="name"
+              placeholder="Tu nombre y apellido"
+              data-agenda-nombre
+              required
+              class="mt-3 w-full rounded-2xl border px-5 py-3.5 text-sm font-medium text-[#141414] outline-none transition-colors placeholder:text-[#141414]/35"
+              style="border-color:rgba(20,20,20,0.12); background:#FFFFFF"
+            />
+          </li>
+        </ol>
+
+        <div data-agenda-resumen hidden class="mt-8 rounded-2xl border p-5" style={`background:${base}; border-color:rgba(20,20,20,0.08)`}>
+          <span class="text-xs font-bold text-[#141414]/50">Tu cita</span>
+          <p data-agenda-resumen-texto class="mt-2 font-display text-base font-bold text-[#141414]"></p>
+        </div>
+
+        <p data-agenda-error hidden role="alert" class="mt-6 rounded-2xl px-5 py-3.5 text-sm font-semibold text-[#141414]" style={`background:${coral}`}></p>
+
+        <button
+          type="submit"
+          data-agenda-submit
+          class="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 text-base font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
+          style={`background:${accent}`}
+        >
+          <WhatsAppIcon width={20} height={20} class="h-5 w-5" />
+          Confirmar por WhatsApp
+        </button>
+        <p class="mt-4 text-center text-xs text-[#141414]/50">
+          Se abre WhatsApp con todos los datos listos. La cita queda confirmada cuando yo te responda.
+        </p>
+      </form>
+    </div>
+
+    <script type="application/json" data-agenda-ocupadas set:html={JSON.stringify(ocupadas)}></script>
+  </section>
+
+  <section id="ubicacion" class="py-24">
+    <div class="shell">
+      <div class="max-w-2xl">
+        <h2 class="display text-3xl text-[#141414] sm:text-5xl">Dónde estoy y cuándo atiendo</h2>
+        <p class="mt-5 text-[#141414]/60">Paipa, Boyacá. Escríbeme antes de venir para reservarte el cupo.</p>
+      </div>
+
+      <div class="mt-12 grid gap-5 lg:grid-cols-2">
+        <div class="overflow-hidden rounded-3xl border" style={`border-color:rgba(20,20,20,0.08); background:${surface}`}>
+          <iframe
+            src="https://www.google.com/maps?q=Paipa,%20Boyac%C3%A1,%20Colombia&output=embed"
+            title="Ubicación de Francy Molano Nails Studio en Paipa, Boyacá"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            class="h-80 w-full border-0 lg:h-full lg:min-h-[26rem]"
+          ></iframe>
+        </div>
+
+        <div class="flex flex-col gap-5">
+          <div class="rounded-3xl border p-8" style={`background:${surface}; border-color:rgba(20,20,20,0.08)`}>
+            <div class="flex items-center gap-3">
+              <Icon name="lucide:map-pin" width={22} height={22} class="h-5.5 w-5.5" style={`color:${accentDeep}`} />
+              <h3 class="font-display text-xl font-bold text-[#141414]">Dirección</h3>
+            </div>
+            <p class="mt-4 leading-relaxed text-[#141414]/65">
+              {FRANCY.address}
+              <br />
+              A dos cuadras del parque principal, segundo piso. Tel. {FRANCY.phoneDisplay}
+            </p>
+          </div>
+
+          <div class="flex-1 rounded-3xl border p-8" style={`background:${surface}; border-color:rgba(20,20,20,0.08)`}>
+            <div class="flex items-center gap-3">
+              <Icon name="lucide:clock" width={22} height={22} class="h-5.5 w-5.5" style={`color:${accentDeep}`} />
+              <h3 class="font-display text-xl font-bold text-[#141414]">Horarios</h3>
+            </div>
+            <ul class="mt-6 space-y-3">
+              {FRANCY.hours.map((h) => (
+                <li class="flex items-center justify-between gap-4 border-b pb-3 text-sm" style="border-color:rgba(20,20,20,0.06)">
+                  <span class="text-[#141414]/60">{h.label}</span>
+                  <span class="font-medium text-[#141414]">{h.value}</span>
+                </li>
+              ))}
+            </ul>
+            <a
+              href="#agenda"
+              class="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
+              style={`background:${accent}`}
+            >
+              <Icon name="lucide:calendar-plus" width={18} height={18} class="h-4.5 w-4.5" />
+              Elegir hora
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonios" class="py-24" style={`background:${surface}`}>
+    <div class="shell">
+      <div class="max-w-2xl">
+        <h2 class="display text-3xl text-[#141414] sm:text-5xl">Lo que dicen mis clientas</h2>
+      </div>
+
+      <div class="mt-12 grid gap-5 md:grid-cols-3">
+        {testimonials.map((t) => (
+          <figure class="flex flex-col rounded-3xl border p-7" style={`background:${base}; border-color:rgba(20,20,20,0.08)`}>
+            <div class="flex gap-1" aria-label="Calificación 5 de 5">
+              {[0, 1, 2, 3, 4].map(() => (
+                <Icon name="lucide:star" width={16} height={16} class="h-4 w-4 fill-current" style={`color:${coral}`} />
+              ))}
+            </div>
+            <blockquote class="mt-5 flex-1 leading-relaxed text-[#141414]/75">“{t.text}”</blockquote>
+            <figcaption class="mt-6">
+              <span class="font-display font-bold text-[#141414]">{t.name}</span>
+              <span class="mt-0.5 block text-sm text-[#141414]/50">{t.tag}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="py-24">
+    <div class="shell max-w-3xl">
+      <h2 class="display text-3xl text-[#141414] sm:text-5xl">Preguntas frecuentes</h2>
+
+      <div class="mt-10 space-y-3">
+        {faqs.map((f) => (
+          <details class="faq-item group rounded-2xl border px-6" style={`background:${surface}; border-color:rgba(20,20,20,0.08)`}>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-display text-base font-bold text-[#141414]">
+              {f.q}
+              <Icon
+                name="lucide:plus"
+                width={18}
+                height={18}
+                class="h-4.5 w-4.5 shrink-0 transition-transform duration-300 group-open:rotate-45"
+                style={`color:${accentDeep}`}
+              />
+            </summary>
+            <p class="pb-6 leading-relaxed text-[#141414]/65">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</main>
+
+<div
+  data-lightbox
+  hidden
+  class="fixed inset-0 z-[60] hidden items-center justify-center p-4"
+  style="background:rgba(20,20,20,0.88)"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Foto ampliada"
+>
+  <button
+    type="button"
+    data-lightbox-close
+    aria-label="Cerrar"
+    class="absolute top-5 right-5 flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#141414]"
+  >
+    <Icon name="lucide:x" width={20} height={20} class="h-5 w-5" />
+  </button>
+  <img data-lightbox-img src="" alt="" class="max-h-[85vh] w-auto max-w-full rounded-2xl object-contain" />
+</div>
+
+<div
+  data-toast
+  hidden
+  role="status"
+  aria-live="polite"
+  class="toast fixed inset-x-4 bottom-24 z-[70] mx-auto flex max-w-sm items-start gap-3 rounded-2xl p-4 shadow-[0_16px_40px_rgba(20,20,20,0.25)]"
+  style={`background:${surface}`}
+>
+  <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full" style={`background:${accent}`}>
+    <Icon name="lucide:check" width={16} height={16} class="h-4 w-4 text-[#141414]" />
+  </span>
+  <div>
+    <p class="font-display text-sm font-bold text-[#141414]">Abriendo WhatsApp</p>
+    <p data-toast-detalle class="mt-0.5 text-xs leading-relaxed text-[#141414]/60"></p>
+  </div>
+</div>
+
+<button
+  type="button"
+  data-back-to-top
+  aria-label="Volver arriba"
+  class="fixed right-5 bottom-20 z-40 hidden h-11 w-11 items-center justify-center rounded-full border bg-white text-[#141414] shadow-[0_10px_30px_rgba(20,20,20,0.15)] transition-all hover:-translate-y-0.5"
+  style="border-color:rgba(20,20,20,0.08)"
+>
+  <Icon name="lucide:arrow-up" width={18} height={18} class="h-4.5 w-4.5" />
+</button>
+
+<a
+  href={wa}
+  target="_blank"
+  rel="noopener"
+  aria-label="Escribir por WhatsApp a Francy Molano Nails Studio"
+  class="fixed right-5 bottom-5 z-50 flex h-14 w-14 items-center justify-center rounded-full text-[#141414] shadow-[0_10px_30px_rgba(20,20,20,0.25)] transition-transform hover:-translate-y-1"
+  style="background:#25d366"
+>
+  <WhatsAppIcon width={26} height={26} class="h-6.5 w-6.5" />
+</a>
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
+
+<DemoFooter
+  brand="Francy Molano · Nails Studio"
+  accent={accent}
+  ctaText="Agenda tu cita hoy"
+  message="Hola Francy, quiero agendar una cita en el estudio. ¿Me cuentas la disponibilidad?"
+/>
+
+<style>
+  .ba-clip {
+    clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+  }
+
+  .ba-line {
+    width: 2px;
+    left: var(--pos);
+    transform: translateX(-1px);
+  }
+
+  .ba-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 44px;
+    height: 44px;
+  }
+
+  .ba-range::-moz-range-thumb {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+  }
+
+  .ba-range:focus-visible {
+    outline: 2px solid #8ba99a;
+    outline-offset: 4px;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .agenda-slot:hover:not([disabled]) {
+    border-color: #8ba99a;
+    transform: translateY(-2px);
+  }
+
+  .agenda-slot[disabled] {
+    cursor: not-allowed;
+    background: rgba(20, 20, 20, 0.04);
+    border-color: rgba(20, 20, 20, 0.06);
+  }
+
+  .agenda-slot[disabled] .agenda-slot-label {
+    color: rgba(20, 20, 20, 0.35);
+    text-decoration: line-through;
+  }
+
+  .agenda-slot[disabled] .agenda-slot-state {
+    color: rgba(20, 20, 20, 0.35);
+  }
+
+  .agenda-slot[aria-pressed='true'] {
+    background: #8ba99a;
+    border-color: #8ba99a;
+  }
+
+  .agenda-slot[aria-pressed='true'] .agenda-slot-state {
+    color: rgba(20, 20, 20, 0.7);
+  }
+
+  [data-agenda-form] select:focus,
+  [data-agenda-form] input:focus {
+    border-color: #8ba99a;
+  }
+
+  .toast {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .toast.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  [data-subnav-link].is-active {
+    background: #8ba99a;
+    color: #141414 !important;
+  }
+
+  [data-back-to-top].is-visible {
+    display: flex !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .agenda-slot:hover:not([disabled]) {
+      transform: none;
+    }
+
+    .toast {
+      transition: none;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  function setupFrancy() {
+    var root = document.querySelector('[data-francy]');
+    if (!root) return;
+
+    var ACCENT = '#8BA99A';
+
+    document.querySelectorAll<HTMLImageElement>('[data-fallback-img]').forEach(function (img) {
+      var hide = function () {
+        img.style.display = 'none';
+      };
+      img.addEventListener('error', hide);
+      if (img.complete && img.naturalWidth === 0) hide();
+    });
+
+    var filterBtns = Array.prototype.slice.call(
+      root!.querySelectorAll<HTMLButtonElement>('[data-filter]')
+    ) as HTMLButtonElement[];
+    var items = Array.prototype.slice.call(
+      root!.querySelectorAll<HTMLElement>('[data-gallery-item]')
+    ) as HTMLElement[];
+    var emptyMsg = root!.querySelector<HTMLElement>('[data-gallery-empty]');
+
+    function paintFilters() {
+      filterBtns.forEach(function (b) {
+        var on = b.getAttribute('aria-pressed') === 'true';
+        b.style.background = on ? ACCENT : '';
+        b.style.borderColor = on ? ACCENT : '';
+        b.style.color = on ? '#141414' : '';
+      });
+    }
+
+    function applyFilter(id: string) {
+      var visible = 0;
+      items.forEach(function (it) {
+        var match = id === 'todas' || it.getAttribute('data-cat') === id;
+        it.hidden = !match;
+        if (match) visible++;
+      });
+      if (emptyMsg) emptyMsg.hidden = visible > 0;
+    }
+
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        filterBtns.forEach(function (b) {
+          b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+        });
+        paintFilters();
+        applyFilter(btn.getAttribute('data-filter') || 'todas');
+      });
+    });
+
+    paintFilters();
+    applyFilter('todas');
+
+    var lightbox = document.querySelector<HTMLElement>('[data-lightbox]');
+    var lightboxImg = document.querySelector<HTMLImageElement>('[data-lightbox-img]');
+    var lightboxClose = document.querySelector<HTMLButtonElement>('[data-lightbox-close]');
+    var lastFocused: HTMLElement | null = null;
+
+    function openLightbox(src: string, alt: string, trigger: HTMLElement) {
+      if (!lightbox || !lightboxImg) return;
+      lastFocused = trigger;
+      lightboxImg.src = src;
+      lightboxImg.alt = alt;
+      lightbox.hidden = false;
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      if (lightboxClose) lightboxClose.focus();
+    }
+
+    function closeLightbox() {
+      if (!lightbox) return;
+      lightbox.hidden = true;
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
+    }
+
+    items.forEach(function (it) {
+      it.addEventListener('click', function () {
+        openLightbox(it.getAttribute('data-src') || '', it.getAttribute('data-alt') || '', it);
+      });
+    });
+
+    if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+    if (lightbox) {
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if ((e as KeyboardEvent).key === 'Escape' && lightbox && !lightbox.hidden) closeLightbox();
+    });
+
+    var ba = root!.querySelector<HTMLElement>('[data-ba]');
+    var baRange = root!.querySelector<HTMLInputElement>('[data-ba-range]');
+    if (ba && baRange) {
+      var setPos = function () {
+        ba!.style.setProperty('--pos', baRange!.value + '%');
+      };
+      baRange.addEventListener('input', setPos);
+      baRange.addEventListener('change', setPos);
+      setPos();
+    }
+
+    setupAgenda();
+    setupFrancyNav();
+  }
+
+  function setupFrancyNav() {
+    var ids = ['servicios', 'galeria', 'antes-despues', 'productos', 'sobre', 'agenda', 'ubicacion', 'testimonios', 'faq'];
+    var links = Array.prototype.slice.call(document.querySelectorAll('[data-subnav-link]')) as HTMLElement[];
+    var headerLinks = Array.prototype.slice.call(document.querySelectorAll('.demo-header-nav a[href^="#"]')) as HTMLElement[];
+    var sections = ids.map(function (id) { return document.getElementById(id); }).filter(Boolean) as HTMLElement[];
+    var backTop = document.querySelector<HTMLElement>('[data-back-to-top]');
+    var subnav = document.querySelector<HTMLElement>('[data-francy-subnav]');
+
+    function setActive(id: string) {
+      links.forEach(function (a) {
+        if (a.getAttribute('data-subnav-link') === id) a.classList.add('is-active');
+        else a.classList.remove('is-active');
+      });
+      headerLinks.forEach(function (a) {
+        var href = (a.getAttribute('href') || '').replace('#', '');
+        if (href === id) a.style.color = '#8BA99A';
+        else a.style.color = '';
+      });
+    }
+
+    var obs = new IntersectionObserver(function (entries) {
+      var visible = entries.filter(function (e) { return e.isIntersecting; }).sort(function (a, b) { return b.intersectionRatio - a.intersectionRatio; })[0];
+      if (visible && visible.target.id) setActive(visible.target.id);
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] });
+    sections.forEach(function (s) { obs.observe(s); });
+
+    function onScroll() {
+      if (!backTop) return;
+      if (window.scrollY > 600) backTop.classList.add('is-visible');
+      else backTop.classList.remove('is-visible');
+      if (subnav) {
+        if (window.scrollY > 300) subnav.style.boxShadow = '0 4px 20px rgba(20,20,20,0.06)';
+        else subnav.style.boxShadow = '';
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    if (backTop) backTop.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var href = a.getAttribute('href') || '';
+        if (href.length < 2 || href.indexOf('#') !== 0) return;
+        var id = href.slice(1);
+        if (ids.indexOf(id) < 0) return;
+        var target = document.getElementById(id);
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', href);
+        setActive(id);
+      });
+    });
+  }
+
+  function setupAgenda() {
+    var form = document.querySelector<HTMLFormElement>('[data-agenda-form]');
+    if (!form) return;
+
+    var STORAGE_KEY = 'francy:ultima-cita';
+    var phone = form.getAttribute('data-phone') || '';
+    var cierre = form.getAttribute('data-cierre') || '18:00';
+
+    var selectEl = form.querySelector<HTMLSelectElement>('[data-agenda-servicio]');
+    var fechaEl = form.querySelector<HTMLInputElement>('[data-agenda-fecha]');
+    var nombreEl = form.querySelector<HTMLInputElement>('[data-agenda-nombre]');
+    var horaEl = form.querySelector<HTMLInputElement>('[data-agenda-hora]');
+    var hintEl = form.querySelector<HTMLElement>('[data-agenda-hint]');
+    var domingoEl = form.querySelector<HTMLElement>('[data-agenda-domingo]');
+    var errorEl = form.querySelector<HTMLElement>('[data-agenda-error]');
+    var resumenEl = form.querySelector<HTMLElement>('[data-agenda-resumen]');
+    var resumenTxt = form.querySelector<HTMLElement>('[data-agenda-resumen-texto]');
+    var submitBtn = form.querySelector<HTMLButtonElement>('[data-agenda-submit]');
+    var slotBtns = Array.prototype.slice.call(
+      form.querySelectorAll<HTMLButtonElement>('[data-slot]')
+    ) as HTMLButtonElement[];
+
+    if (!selectEl || !fechaEl || !nombreEl || !horaEl) return;
+
+    var ocupadas: Record<string, string[]> = {};
+    var dataTag = document.querySelector('[data-agenda-ocupadas]');
+    if (dataTag && dataTag.textContent) {
+      try {
+        ocupadas = JSON.parse(dataTag.textContent) || {};
+      } catch (e) {
+        ocupadas = {};
+      }
+    }
+
+    function toMin(hhmm: string) {
+      var parts = (hhmm || '').split(':');
+      return parseInt(parts[0], 10) * 60 + parseInt(parts[1] || '0', 10);
+    }
+
+    function hoyISO() {
+      var d = new Date();
+      var m = String(d.getMonth() + 1).padStart(2, '0');
+      var day = String(d.getDate()).padStart(2, '0');
+      return d.getFullYear() + '-' + m + '-' + day;
+    }
+
+    fechaEl!.min = hoyISO();
+
+    function servicioActual() {
+      var opt = selectEl!.selectedOptions[0];
+      if (!opt || !opt.value) return null;
+      return {
+        name: opt.value,
+        price: opt.getAttribute('data-price') || '',
+        dur: parseInt(opt.getAttribute('data-dur') || '60', 10),
+      };
+    }
+
+    function pintarResumen() {
+      var svc = servicioActual();
+      if (!resumenEl || !resumenTxt) return;
+      if (!svc || !fechaEl!.value || !horaEl!.value) {
+        resumenEl.hidden = true;
+        return;
+      }
+      resumenEl.hidden = false;
+      resumenTxt.textContent = svc.name + ' · ' + fechaEl!.value + ' · ' + horaEl!.value + ' · ' + svc.price;
+    }
+
+    function guardar() {
+      try {
+        window.localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({
+            servicio: selectEl!.value,
+            fecha: fechaEl!.value,
+            hora: horaEl!.value,
+            nombre: nombreEl!.value,
+          })
+        );
+      } catch (e) {
+        return;
+      }
+    }
+
+    function renderSlots() {
+      var svc = servicioActual();
+      var fecha = fechaEl!.value;
+      var ocupadasDia = (fecha && ocupadas[fecha]) || [];
+      var cierreMin = toMin(cierre);
+      var esHoy = fecha === hoyISO();
+      var ahora = new Date();
+      var ahoraMin = ahora.getHours() * 60 + ahora.getMinutes();
+
+      slotBtns.forEach(function (btn) {
+        var v = btn.getAttribute('data-slot') || '';
+        var inicio = toMin(v);
+        var stateEl = btn.querySelector<HTMLElement>('.agenda-slot-state');
+        var motivo = '';
+
+        if (ocupadasDia.indexOf(v) >= 0) {
+          motivo = 'Ocupado';
+        } else if (fecha && esHoy && inicio <= ahoraMin) {
+          motivo = 'Ya pasó';
+        } else if (svc && inicio + svc.dur > cierreMin) {
+          motivo = 'No alcanza';
+        } else if (
+          svc &&
+          ocupadasDia.some(function (o) {
+            var oi = toMin(o);
+            return oi > inicio && oi < inicio + svc!.dur;
+          })
+        ) {
+          motivo = 'No alcanza';
+        }
+
+        btn.disabled = motivo !== '';
+        if (stateEl) stateEl.textContent = motivo || 'Disponible';
+
+        if (btn.disabled && horaEl!.value === v) {
+          horaEl!.value = '';
+          btn.setAttribute('aria-pressed', 'false');
+        }
+      });
+
+      if (hintEl) {
+        if (!svc || !fecha) {
+          hintEl.hidden = false;
+          hintEl.textContent = 'Escoge servicio y fecha para ver los cupos reales de ese día.';
+        } else {
+          var libres = slotBtns.filter(function (b) {
+            return !b.disabled;
+          }).length;
+          hintEl.hidden = false;
+          hintEl.textContent = libres
+            ? 'Quedan ' + libres + ' cupos para ' + svc.name.toLowerCase() + ' ese día (' + svc.dur + ' min).'
+            : 'No hay cupos ese día. Prueba otra fecha o escríbeme por WhatsApp.';
+        }
+      }
+
+      if (domingoEl) {
+        var dom = false;
+        if (fecha) {
+          var p = fecha.split('-');
+          dom = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])).getDay() === 0;
+        }
+        domingoEl.hidden = !dom;
+      }
+
+      pintarResumen();
+    }
+
+    slotBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (btn.disabled) return;
+        var v = btn.getAttribute('data-slot') || '';
+        var yaEstaba = horaEl!.value === v;
+        slotBtns.forEach(function (b) {
+          b.setAttribute('aria-pressed', 'false');
+        });
+        horaEl!.value = yaEstaba ? '' : v;
+        if (!yaEstaba) btn.setAttribute('aria-pressed', 'true');
+        if (errorEl) errorEl.hidden = true;
+        pintarResumen();
+        guardar();
+      });
+    });
+
+    [selectEl, fechaEl].forEach(function (el) {
+      el!.addEventListener('change', function () {
+        if (errorEl) errorEl.hidden = true;
+        renderSlots();
+        guardar();
+      });
+    });
+
+    nombreEl!.addEventListener('input', function () {
+      if (errorEl) errorEl.hidden = true;
+      guardar();
+    });
+
+    function mostrarToast(detalle: string) {
+      var toast = document.querySelector<HTMLElement>('[data-toast]');
+      var det = document.querySelector<HTMLElement>('[data-toast-detalle]');
+      if (!toast) return;
+      if (det) det.textContent = detalle;
+      toast.hidden = false;
+      requestAnimationFrame(function () {
+        toast!.classList.add('is-visible');
+      });
+      window.setTimeout(function () {
+        toast!.classList.remove('is-visible');
+        window.setTimeout(function () {
+          toast!.hidden = true;
+        }, 320);
+      }, 4200);
+    }
+
+    function fallar(msg: string, focus: HTMLElement | null) {
+      if (errorEl) {
+        errorEl.hidden = false;
+        errorEl.textContent = msg;
+      }
+      if (focus) focus.focus();
+    }
+
+    if (submitBtn) {
+      submitBtn.addEventListener('click', function () {
+        var svc = servicioActual();
+        if (!svc) return fallar('Falta escoger el servicio.', selectEl);
+        if (!fechaEl!.value) return fallar('Falta escoger la fecha.', fechaEl);
+        if (!horaEl!.value) return fallar('Falta escoger la hora.', slotBtns[0] || null);
+        if (!nombreEl!.value.trim()) return fallar('Falta tu nombre.', nombreEl);
+
+        if (errorEl) errorEl.hidden = true;
+        guardar();
+
+        var msg = [
+          'Hola Francy Molano Nails Studio, quiero agendar:',
+          '• Servicio: ' + svc.name + ' (' + svc.price + ')',
+          '• Fecha: ' + fechaEl!.value,
+          '• Hora: ' + horaEl!.value,
+          '• Nombre: ' + nombreEl!.value.trim(),
+          '¿Me confirman disponibilidad? Gracias.',
+        ].join('\n');
+
+        mostrarToast(svc.name + ' · ' + fechaEl!.value + ' · ' + horaEl!.value);
+        window.open('https://wa.me/' + phone + '?text=' + encodeURIComponent(msg), '_blank', 'noopener,noreferrer');
+      });
+    }
+
+    try {
+      var raw = window.localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var prev = JSON.parse(raw);
+        if (prev.servicio) selectEl!.value = prev.servicio;
+        if (prev.nombre) nombreEl!.value = prev.nombre;
+        if (prev.fecha && prev.fecha >= hoyISO()) fechaEl!.value = prev.fecha;
+        if (prev.hora && fechaEl!.value) {
+          horaEl!.value = prev.hora;
+          slotBtns.forEach(function (b) {
+            b.setAttribute('aria-pressed', b.getAttribute('data-slot') === prev.hora ? 'true' : 'false');
+          });
+        }
+      }
+    } catch (e) {
+      horaEl!.value = '';
+    }
+
+    renderSlots();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFrancy);
+  } else {
+    setupFrancy();
+  }
+</script>

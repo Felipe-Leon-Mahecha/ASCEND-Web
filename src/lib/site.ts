@@ -1,6 +1,6 @@
 export const SITE = {
-  name: 'Felipe León Web Studio',
-  shortName: 'Felipe León',
+  name: 'ASCEND',
+  shortName: 'ASCEND',
   tagline: 'Tu negocio en línea esta semana',
   description:
     'Diseño y desarrollo de páginas web premium para negocios que quieren más clientes. Entrega rápida, WhatsApp integrado y diseño a medida — sin plantillas.',
@@ -20,6 +20,6 @@ export const SITE = {
   ],
 } as const;
 
-export function whatsappLink(message: string) {
-  return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(message)}`;
+export function whatsappLink(message: string, phone: string = SITE.whatsapp) {
+  return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }

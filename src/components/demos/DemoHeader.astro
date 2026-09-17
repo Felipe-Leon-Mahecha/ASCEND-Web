@@ -11,9 +11,10 @@ interface Props {
   light?: boolean;
   editableBrand?: boolean;
   showLogoPlaceholder?: boolean;
+  logoImage?: string;
 }
 
-const { brand, accent, links, ctaText, ctaHref, light = false, editableBrand = false, showLogoPlaceholder = false } = Astro.props;
+const { brand, accent, links, ctaText, ctaHref, light = false, editableBrand = false, showLogoPlaceholder = false, logoImage } = Astro.props;
 const text = light ? 'text-[#141414]' : 'text-white';
 const textSoft = light ? 'text-[#141414]/60' : 'text-white/60';
 const bg = light ? 'bg-white/70' : 'bg-[#0a0a0a]/70';
@@ -30,23 +31,38 @@ const border = light ? 'border-[#141414]/10' : 'border-white/10';
         <div
           class="demo-logo-wrap group/Logo relative shrink-0"
           role="img"
-          aria-label="Placeholder de logo"
+          aria-label="Logo"
         >
           <div
             class="demo-logo-glow pointer-events-none absolute -inset-2 rounded-full blur-2xl opacity-60"
             aria-hidden="true"
           ></div>
-          <button
-            type="button"
-            class="demo-logo-btn relative flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-full border-2 border-dashed transition-transform sm:h-14 sm:w-14"
-            style="border-color: var(--demo-accent, var(--demo-accent-default)); color: var(--demo-accent, var(--demo-accent-default))"
-            aria-label="Tu logo aquí"
-          >
-            <Icon name="lucide:image-plus" width={22} height={22} class="h-5 w-5 sm:h-[22px] sm:w-[22px]" />
-          </button>
-          <span class="demo-logo-tooltip pointer-events-none absolute -bottom-9 left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1.5 font-mono text-[10px] font-medium tracking-[0.15em] uppercase opacity-0 transition-opacity duration-200">
-            Así se vería tu logo aquí
-          </span>
+          {logoImage ? (
+            <img
+              src={logoImage}
+              alt={`Logo de ${brand}`}
+              width="56"
+              height="56"
+              class="relative h-12 w-12 shrink-0 rounded-full object-cover shadow-sm sm:h-14 sm:w-14"
+              style="border:2px solid var(--demo-accent, var(--demo-accent-default))"
+              loading="eager"
+              decoding="async"
+            />
+          ) : (
+            <button
+              type="button"
+              class="demo-logo-btn relative flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-full border-2 border-dashed transition-transform sm:h-14 sm:w-14"
+              style="border-color: var(--demo-accent, var(--demo-accent-default)); color: var(--demo-accent, var(--demo-accent-default))"
+              aria-label="Tu logo aquí"
+            >
+              <Icon name="lucide:image-plus" width={22} height={22} class="h-5 w-5 sm:h-[22px] sm:w-[22px]" />
+            </button>
+          )}
+          {!logoImage && (
+            <span class="demo-logo-tooltip pointer-events-none absolute -bottom-9 left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1.5 font-mono text-[10px] font-medium tracking-[0.15em] uppercase opacity-0 transition-opacity duration-200">
+              Así se vería tu logo aquí
+            </span>
+          )}
         </div>
       )}
       {editableBrand ? (
