@@ -1,0 +1,164 @@
+---
+import WhatsAppIcon from '../ui/WhatsAppIcon.astro';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  badge: string;
+  titleA: string;
+  titleB: string;
+  tagline: string;
+  accent: string;
+  palette: string[];
+  ctaText: string;
+  ctaHref: string;
+  secondaryText: string;
+  secondaryHref: string;
+  meta: string[];
+  dark?: boolean;
+  editableTitle?: boolean;
+}
+
+const {
+  badge,
+  titleA,
+  titleB,
+  tagline,
+  accent,
+  palette,
+  ctaText,
+  ctaHref,
+  secondaryText,
+  secondaryHref,
+  meta,
+  dark = false,
+  editableTitle = false,
+} = Astro.props;
+
+const text = dark ? 'text-white' : 'text-[#141414]';
+const textSoft = dark ? 'text-white/70' : 'text-[#141414]/65';
+const secondary = dark
+  ? 'border-white/40 text-white hover:border-white hover:bg-white/10'
+  : 'border-[#141414]/25 text-[#141414] hover:border-[#141414] hover:bg-[#141414]/5';
+---
+
+<section
+  id="inicio"
+  class="demo-hero relative overflow-hidden"
+  style={`--demo-accent-default: ${accent}; background: linear-gradient(160deg, ${palette[0]} 0%, ${palette[1]} 100%)`}
+>
+  <div
+    class="bg-grid absolute inset-0 opacity-30 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_30%,black,transparent)]"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="demo-hero-glow-top absolute -top-32 right-0 h-96 w-96 rounded-full blur-[120px]"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="demo-hero-glow-bottom absolute -bottom-40 -left-20 h-80 w-80 rounded-full blur-[110px]"
+    aria-hidden="true"
+  ></div>
+
+  <div class="shell relative flex min-h-[78svh] flex-col items-center justify-center pt-40 pb-24 text-center">
+    <span
+      class="demo-hero-badge rounded-full border px-4 py-1.5 font-mono text-xs font-medium tracking-[0.25em] uppercase"
+    >
+      {badge}
+    </span>
+
+    {editableTitle ? (
+      <div class={`group relative mt-6 max-w-4xl [&_[contenteditable]:focus]:outline-none`}>
+        <h1
+          class={`display text-4xl leading-[1.05] sm:text-6xl lg:text-7xl ${text}`}
+          contenteditable="true"
+          spellcheck="false"
+        >
+          {titleA}{' '}
+          <span class="demo-hero-title relative inline-block">
+            {titleB}
+            <span
+              class="demo-hero-underline absolute -bottom-1 left-0 h-1.5 w-full rounded-full"
+              aria-hidden="true"
+            ></span>
+          </span>
+        </h1>
+        <Icon
+          name="lucide:pencil"
+          width={18}
+          height={18}
+          class="pointer-events-none absolute -right-7 top-3 h-4.5 w-4.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-60 sm:-right-9 sm:top-5"
+          style="color: var(--demo-accent, var(--demo-accent-default))"
+        />
+      </div>
+    ) : (
+      <h1 class={`display mt-6 max-w-4xl text-4xl leading-[1.05] sm:text-6xl lg:text-7xl ${text}`}>
+        {titleA}{' '}
+        <span class="demo-hero-title relative inline-block">
+          {titleB}
+          <span
+            class="demo-hero-underline absolute -bottom-1 left-0 h-1.5 w-full rounded-full"
+            aria-hidden="true"
+          ></span>
+        </span>
+      </h1>
+    )}
+
+    <p class={`mt-5 max-w-xl text-lg leading-relaxed ${textSoft}`}>{tagline}</p>
+
+    <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+      <a
+        href={ctaHref}
+        target="_blank"
+        rel="noopener"
+        class="demo-hero-cta inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white shadow-xl transition-transform hover:-translate-y-0.5"
+      >
+        <WhatsAppIcon width={20} height={20} class="h-5 w-5" />
+        {ctaText}
+      </a>
+      <a
+        href={secondaryHref}
+        class={`inline-flex items-center justify-center rounded-full border px-7 py-3.5 font-semibold transition-colors ${secondary}`}
+      >
+        {secondaryText}
+      </a>
+    </div>
+
+    <p
+      class={`demo-hero-meta mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 font-mono text-xs tracking-[0.2em] uppercase ${dark ? 'text-white/45' : 'text-[#141414]/45'}`}
+    >
+      {meta.map((m, i) => (
+        <span class="flex items-center gap-4">
+          {i > 0 && <span class="demo-hero-sep">/</span>}
+          {m}
+        </span>
+      ))}
+    </p>
+  </div>
+</section>
+<style>
+  .demo-hero-glow-top {
+    background: var(--demo-accent, var(--demo-accent-default));
+    opacity: 0.25;
+  }
+  .demo-hero-glow-bottom {
+    background: var(--demo-accent, var(--demo-accent-default));
+    opacity: 0.15;
+  }
+  .demo-hero-badge {
+    border-color: color-mix(in srgb, var(--demo-accent, var(--demo-accent-default)) 25%, transparent);
+    color: var(--demo-accent, var(--demo-accent-default));
+  }
+  .demo-hero-title {
+    color: var(--demo-accent, var(--demo-accent-default));
+  }
+  .demo-hero-underline {
+    background: var(--demo-accent, var(--demo-accent-default));
+    opacity: 0.35;
+  }
+  .demo-hero-cta {
+    background: var(--demo-accent, var(--demo-accent-default));
+  }
+  .demo-hero-sep {
+    color: var(--demo-accent, var(--demo-accent-default));
+  }
+</style>

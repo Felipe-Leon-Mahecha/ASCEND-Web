@@ -1,0 +1,199 @@
+---
+import Gem from '../ui/Gem.astro';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  brand: string;
+  accent: string;
+  links: { label: string; href: string }[];
+  ctaText: string;
+  ctaHref: string;
+  light?: boolean;
+  editableBrand?: boolean;
+  showLogoPlaceholder?: boolean;
+  logoImage?: string;
+}
+
+const { brand, accent, links, ctaText, ctaHref, light = false, editableBrand = false, showLogoPlaceholder = false, logoImage } = Astro.props;
+const text = light ? 'text-[#141414]' : 'text-white';
+const textSoft = light ? 'text-[#141414]/60' : 'text-white/60';
+const bg = light ? 'bg-white/70' : 'bg-[#0a0a0a]/70';
+const border = light ? 'border-[#141414]/10' : 'border-white/10';
+---
+
+<header
+  class={`demo-header-wrap sticky top-11 z-40 border-b backdrop-blur ${bg} ${border}`}
+  style={`--demo-accent-default: ${accent}`}
+>
+  <div class="shell flex h-16 items-center justify-between gap-4">
+    <div class="flex items-center gap-4 min-w-0">
+      {showLogoPlaceholder && (
+        <div
+          class="demo-logo-wrap group/Logo relative shrink-0"
+          role="img"
+          aria-label="Logo"
+        >
+          <div
+            class="demo-logo-glow pointer-events-none absolute -inset-2 rounded-full blur-2xl opacity-60"
+            aria-hidden="true"
+          ></div>
+          {logoImage ? (
+            <img
+              src={logoImage}
+              alt={`Logo de ${brand}`}
+              width="56"
+              height="56"
+              class="relative h-12 w-12 shrink-0 rounded-full object-cover shadow-sm sm:h-14 sm:w-14"
+              style="border:2px solid var(--demo-accent, var(--demo-accent-default))"
+              loading="eager"
+              decoding="async"
+            />
+          ) : (
+            <button
+              type="button"
+              class="demo-logo-btn relative flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-full border-2 border-dashed transition-transform sm:h-14 sm:w-14"
+              style="border-color: var(--demo-accent, var(--demo-accent-default)); color: var(--demo-accent, var(--demo-accent-default))"
+              aria-label="Tu logo aquí"
+            >
+              <Icon name="lucide:image-plus" width={22} height={22} class="h-5 w-5 sm:h-[22px] sm:w-[22px]" />
+            </button>
+          )}
+          {!logoImage && (
+            <span class="demo-logo-tooltip pointer-events-none absolute -bottom-9 left-1/2 z-50 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1.5 font-mono text-[10px] font-medium tracking-[0.15em] uppercase opacity-0 transition-opacity duration-200">
+              Así se vería tu logo aquí
+            </span>
+          )}
+        </div>
+      )}
+      {editableBrand ? (
+        <div class={`group relative flex min-w-0 items-center gap-2.5 font-display text-lg font-bold ${text} [&_[contenteditable]:focus]:outline-none`}>
+          <Gem width={22} height={22} class="h-5 w-5 shrink-0" />
+          <span class="demo-header-brand min-w-0 truncate" contenteditable="true" spellcheck="false">{brand}</span>
+          <Icon
+            name="lucide:pencil"
+            width={14}
+            height={14}
+            class="pointer-events-none h-3.5 w-3.5 shrink-0 opacity-0 transition-opacity group-hover:opacity-60"
+            style="color: var(--demo-accent, var(--demo-accent-default))"
+          />
+        </div>
+      ) : (
+        <a href="#inicio" class={`flex min-w-0 items-center gap-2.5 font-display text-lg font-bold ${text}`}>
+          <Gem width={22} height={22} class="h-5 w-5 shrink-0" />
+          <span class="demo-header-brand min-w-0 truncate">{brand}</span>
+        </a>
+      )}
+    </div>
+
+    <nav class="demo-header-nav hidden items-center gap-7 md:flex">
+      {links.map((l) => (
+        <a href={l.href} class={`text-sm font-medium transition-colors ${textSoft}`}>
+          {l.label}
+        </a>
+      ))}
+    </nav>
+
+    <a
+      href={ctaHref}
+      class="inline-flex items-center rounded-full px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:-translate-y-0.5"
+      style="background: var(--demo-accent, var(--demo-accent-default))"
+    >
+      {ctaText}
+    </a>
+  </div>
+</header>
+<style>
+  .demo-header-nav a:hover {
+    color: var(--demo-accent, var(--demo-accent-default));
+  }
+  .demo-logo-glow {
+    background: var(--demo-accent, var(--demo-accent-default));
+    box-shadow: var(--shadow-glow);
+    opacity: 0.35;
+  }
+  .demo-logo-btn {
+    background: color-mix(in srgb, var(--demo-accent, var(--demo-accent-default)) 8%, transparent);
+  }
+  .group\/Logo:hover .demo-logo-btn {
+    transform: scale(1.05);
+    background: color-mix(in srgb, var(--demo-accent, var(--demo-accent-default)) 14%, transparent);
+  }
+  .group\/Logo:hover .demo-logo-tooltip {
+    opacity: 1;
+  }
+  .demo-logo-tooltip {
+    background: var(--demo-accent, var(--demo-accent-default));
+    color: #fff;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.18));
+  }
+  .demo-logo-tooltip::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 6px solid var(--demo-accent, var(--demo-accent-default));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .demo-logo-btn,
+    .demo-logo-btn:hover {
+      transform: none !important;
+      transition: none !important;
+    }
+    .demo-logo-tooltip,
+    .group\/Logo:hover .demo-logo-tooltip {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script is:inline>
+  function __demoHeaderSetupTabs() {
+    var tabsContainer = document.querySelector('[data-tabs-container]');
+    if (!tabsContainer) return;
+    var ANCHOR_TO_TAB = {
+      '#servicios': { tab: 'catalogo', scroll: '#servicios' },
+      '#tienda': { tab: 'catalogo', scroll: '#tienda' },
+      '#productos': { tab: 'catalogo', scroll: '#tienda' },
+      '#catalogo': { tab: 'catalogo', scroll: '#servicios' },
+      '#testimonios': { tab: 'inicio', scroll: '#testimonios' },
+      '#horarios': { tab: 'panel', scroll: '#horarios' },
+      '#ubicacion': { tab: 'panel', scroll: '#horarios' },
+      '#panel-admin': { tab: 'panel', scroll: '#panel-admin' },
+      '#reservas': { tab: 'reservas', scroll: '#reservas' },
+      '#agendar': { tab: 'reservas', scroll: '#reservas' },
+      '#inicio': { tab: 'inicio', scroll: '#inicio' },
+    };
+
+    document.querySelectorAll('.demo-header-nav a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var href = a.getAttribute('href') || '';
+        if (href.indexOf('#tab=') === 0) return;
+        var entry = ANCHOR_TO_TAB[href];
+        if (!entry) return;
+        var currentPanel = tabsContainer.querySelector('[data-tab-panel].is-open');
+        var currentTab = currentPanel ? currentPanel.getAttribute('data-tab-panel') : null;
+        if (currentTab === entry.tab) {
+          e.preventDefault();
+          var tgt = document.querySelector(entry.scroll);
+          if (tgt) {
+            try { tgt.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            catch (e2) { tgt.scrollIntoView(); }
+          }
+        } else {
+          e.preventDefault();
+          window.location.hash = '#tab=' + entry.tab +
+            (entry.scroll && entry.tab !== 'inicio' ? '&scroll=' + encodeURIComponent(entry.scroll.slice(1)) : '');
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', __demoHeaderSetupTabs);
+  } else {
+    __demoHeaderSetupTabs();
+  }
+</script>

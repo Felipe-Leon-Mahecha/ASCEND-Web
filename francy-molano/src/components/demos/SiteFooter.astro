@@ -1,0 +1,57 @@
+---
+import WhatsAppIcon from '../ui/WhatsAppIcon.astro';
+import { whatsappLink } from '../../lib/site';
+
+interface Props {
+  brand: string;
+  accent: string;
+  ctaText: string;
+  message: string;
+}
+
+const { brand, accent, ctaText, message } = Astro.props;
+const wa = whatsappLink(message);
+---
+
+<section class="relative overflow-hidden bg-[#0a0a0a] py-24">
+  <div
+    class="absolute top-0 left-1/2 h-72 w-[42rem] -translate-x-1/2 rounded-full blur-[130px]"
+    style={`background:${accent}; opacity:0.18`}
+    aria-hidden="true"
+  ></div>
+
+  <div class="shell relative flex flex-col items-center text-center">
+    <h2 class="display max-w-2xl text-3xl text-white sm:text-5xl">{ctaText}</h2>
+    <p class="mt-4 max-w-md text-white/60">
+      Escribe hoy y te respondemos en minutos con disponibilidad.
+    </p>
+    <a
+      href={wa}
+      target="_blank"
+      rel="noopener"
+      class="mt-9 inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold text-white shadow-xl transition-transform hover:-translate-y-0.5"
+      style={`background:${accent}`}
+    >
+      <WhatsAppIcon width={20} height={20} class="h-5 w-5" />
+      {ctaText}
+    </a>
+  </div>
+</section>
+
+<footer class="border-t border-white/10 bg-[#0a0a0a]">
+  <div class="shell flex flex-col items-center justify-between gap-4 py-8 sm:flex-row">
+    <p class="font-mono text-xs tracking-[0.2em] text-white/40 uppercase">{brand} · {new Date().getFullYear()}</p>
+    <p class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm text-white/60">
+      <span>Hecho por</span>
+      <a
+        href="https://felipe-leon-web-studio.vercel.app"
+        target="_blank"
+        rel="noopener"
+        class="font-semibold text-white underline decoration-2 underline-offset-4 transition-colors hover:text-[var(--accent)]"
+        style={`--accent:${accent}`}
+      >
+        Felipe León Web Studio
+      </a>
+    </p>
+  </div>
+</footer>

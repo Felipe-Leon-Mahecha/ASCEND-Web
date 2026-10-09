@@ -1,0 +1,9 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import FrancyDemo from '../components/demos/FrancyDemo.astro';
+import { FRANCY } from '../lib/francy';
+---
+
+<SiteLayout title={FRANCY.seoTitle} description={FRANCY.seoDescription}>
+  <FrancyDemo />
+</SiteLayout>
