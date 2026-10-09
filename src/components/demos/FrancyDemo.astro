@@ -27,9 +27,9 @@ const photoPath = '/clientes/francy/';
 const wa = whatsappLink('Hola Francy, quiero agendar una cita en el estudio. ¿Me cuentas la disponibilidad?', FRANCY.whatsapp);
 
 const heroShots = [
-  { img: '', label: 'Semipermanente', icon: 'lucide:sparkles', grad: 'linear-gradient(150deg,#25d366 0%,#C9D8CF 60%,#F5F0E8 100%)' },
-  { img: '', label: 'Acrílicas', icon: 'lucide:gem', grad: 'linear-gradient(150deg,#E8A090 0%,#F1CFC4 55%,#F5F0E8 100%)' },
-  { img: '', label: 'Pestañas', icon: 'lucide:eye', grad: 'linear-gradient(150deg,#141414 0%,#5F6F66 55%,#C9D8CF 100%)' },
+  { img: `${photoPath}hero-1.jpg`, label: 'Semipermanente', icon: 'lucide:sparkles', grad: 'linear-gradient(150deg,#25d366 0%,#C9D8CF 60%,#F5F0E8 100%)' },
+  { img: `${photoPath}hero-2.jpg`, label: 'Acrílicas', icon: 'lucide:gem', grad: 'linear-gradient(150deg,#E8A090 0%,#F1CFC4 55%,#F5F0E8 100%)' },
+  { img: `${photoPath}hero-3.jpg`, label: 'Pestañas', icon: 'lucide:eye', grad: 'linear-gradient(150deg,#141414 0%,#5F6F66 55%,#C9D8CF 100%)' },
 ];
 
 const serviceGroups = [
@@ -82,28 +82,33 @@ const slots = [
 const cierre = FRANCY.closing;
 
 const gallery = [
-  { img: `${photoPath}galeria-1.jpg`, cat: 'semipermanente', alt: 'Uñas semipermanentes en tono nude', grad: 'linear-gradient(140deg,#F1CFC4,#E8A090)' },
-  { img: `${photoPath}galeria-2.jpg`, cat: 'acrilicas', alt: 'Uñas acrílicas almendra con francés', grad: 'linear-gradient(140deg,#C9D8CF,#25d366)' },
-  { img: `${photoPath}galeria-3.jpg`, cat: 'cejas', alt: 'Cejas laminadas con diseño natural', grad: 'linear-gradient(140deg,#E9E3D8,#B9A894)' },
-  { img: `${photoPath}galeria-4.jpg`, cat: 'semipermanente', alt: 'Semipermanente con detalles dorados', grad: 'linear-gradient(140deg,#F5F0E8,#C9D8CF)' },
-  { img: `${photoPath}galeria-5.jpg`, cat: 'acrilicas', alt: 'Acrílicas largas con encapsulado', grad: 'linear-gradient(140deg,#25d366,#5F6F66)' },
-  { img: `${photoPath}galeria-6.jpg`, cat: 'cejas', alt: 'Extensiones de pestañas efecto rímel', grad: 'linear-gradient(140deg,#141414,#5F6F66)' },
-  { img: `${photoPath}galeria-7.jpg`, cat: 'semipermanente', alt: 'Manicure ruso con esmalte rosado', grad: 'linear-gradient(140deg,#F1CFC4,#C9D8CF)' },
-  { img: `${photoPath}galeria-8.jpg`, cat: 'acrilicas', alt: 'Press-on con arte a mano alzada', grad: 'linear-gradient(140deg,#E8A090,#25d366)' },
+  { img: `${photoPath}galeria-1.jpg`, cat: 'unas', alt: 'Diseño de uñas realizado en el estudio', grad: 'linear-gradient(140deg,#F1CFC4,#E8A090)' },
+  { img: `${photoPath}galeria-2.jpg`, cat: 'unas', alt: 'Uñas decoradas a mano alzada', grad: 'linear-gradient(140deg,#C9D8CF,#25d366)' },
+  { img: `${photoPath}galeria-3.jpg`, cat: 'unas', alt: 'Arte en uñas con acabado profesional', grad: 'linear-gradient(140deg,#E9E3D8,#B9A894)' },
+  { img: `${photoPath}galeria-4.jpg`, cat: 'unas', alt: 'Diseño personalizado en uñas', grad: 'linear-gradient(140deg,#F5F0E8,#C9D8CF)' },
+  { img: `${photoPath}galeria-5.jpg`, cat: 'unas', alt: 'Uñas con brillo y color', grad: 'linear-gradient(140deg,#25d366,#5F6F66)' },
+  { img: `${photoPath}galeria-6.jpg`, cat: 'unas', alt: 'Detalle de diseño en uñas', grad: 'linear-gradient(140deg,#141414,#5F6F66)' },
+  { img: `${photoPath}galeria-7.jpg`, cat: 'mirada', alt: 'Extensiones de pestañas', grad: 'linear-gradient(140deg,#F1CFC4,#C9D8CF)' },
+  { img: `${photoPath}galeria-8.jpg`, cat: 'mirada', alt: 'Trabajo de pestañas pelo a pelo', grad: 'linear-gradient(140deg,#E8A090,#25d366)' },
 ];
 
 const filters = [
   { id: 'todas', label: 'Todas' },
-  { id: 'semipermanente', label: 'Semipermanente' },
-  { id: 'acrilicas', label: 'Acrílicas' },
-  { id: 'cejas', label: 'Cejas y pestañas' },
+  { id: 'unas', label: 'Uñas' },
+  { id: 'mirada', label: 'Mirada' },
 ];
 
 const products = [
-  { img: `${photoPath}producto-base-titanio.jpg`, name: "Base Uñas de Titanio Chic's", price: '$32.000', desc: 'Base fortalecedora que evita que la uña natural se quiebre.', grad: 'linear-gradient(150deg,#C9D8CF,#25d366)' },
-  { img: `${photoPath}producto-oleo-organic.jpg`, name: 'Óleo de cutícula Organic', price: '$18.000', desc: 'Aceite nutritivo para cutícula seca. Uso diario.', grad: 'linear-gradient(150deg,#F1CFC4,#E8A090)' },
-  { img: `${photoPath}producto-smoothie-mara.jpg`, name: 'Smoothie Mara 350 ml', price: '$38.000', desc: 'Crema corporal humectante de absorción rápida.', grad: 'linear-gradient(150deg,#F5F0E8,#B9A894)' },
-  { img: `${photoPath}producto-serum-bioaqua.jpg`, name: 'Sérum BIOAQUA para pestañas', price: '$25.000', desc: 'Sérum de crecimiento para pestañas y cejas.', grad: 'linear-gradient(150deg,#5F6F66,#141414)' },
+  { name: "Base Uñas de Titanio Chic's", desc: 'Base fortalecedora que evita que la uña natural se quiebre.' },
+  { name: 'Óleo de cutícula Organic', desc: 'Aceite nutritivo para cutícula seca. Uso diario.' },
+  { name: 'Smoothie Mara 350 ml', desc: 'Crema corporal humectante de absorción rápida.' },
+  { name: 'Sérum BIOAQUA para pestañas', desc: 'Sérum de crecimiento para pestañas y cejas.' },
+];
+
+const productPhotos = [
+  { img: `${photoPath}producto-1.jpg`, alt: 'Productos profesionales del estudio' },
+  { img: `${photoPath}producto-2.jpg`, alt: 'Productos para el cuidado en casa' },
+  { img: `${photoPath}producto-3.jpg`, alt: 'Productos disponibles en el estudio' },
 ];
 
 const values = [
@@ -450,47 +455,58 @@ const jsonLd = {
       <div class="max-w-2xl">
         <h2 class="display text-3xl text-[#141414] sm:text-5xl">Productos que uso y vendo</h2>
         <p class="mt-5 text-[#141414]/60">
-          Los mismos que aplico en el estudio. Te los entrego en Paipa o los envío por servientrega.
+          Los mismos que aplico en el estudio. Escríbeme y te cuento cuáles tengo disponibles.
         </p>
       </div>
 
-      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="mt-12 grid gap-5 sm:grid-cols-3">
+        {productPhotos.map((f) => (
+          <figure class="relative aspect-[4/5] overflow-hidden rounded-3xl" style={`background:${base}`}>
+            <img
+              src={f.img}
+              alt={f.alt}
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 h-full w-full object-cover"
+              data-fallback-img
+            />
+          </figure>
+        ))}
+      </div>
+
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
         {products.map((p) => (
-          <div class="flex flex-col overflow-hidden rounded-3xl border" style={`background:${surface}; border-color:rgba(20,20,20,0.08)`}>
-            <figure class="relative aspect-square" style={`background:${p.grad}`}>
-              <img
-                src={p.img}
-                alt={p.name}
-                loading="lazy"
-                decoding="async"
-                class="absolute inset-0 h-full w-full object-cover"
-                data-fallback-img
-              />
-            </figure>
-            <div class="flex flex-1 flex-col p-6">
-              <h3 class="font-display text-base font-bold text-[#141414]">{p.name}</h3>
-              <p class="mt-2 flex-1 text-sm leading-relaxed text-[#141414]/60">{p.desc}</p>
-              <span class="mt-4 font-display text-xl font-bold text-[#141414]">{p.price}</span>
-              <a
-                href={whatsappLink(`Hola Francy, quiero pedir "${p.name}" (${p.price}). ¿Tienes disponible?`, FRANCY.whatsapp)}
-                target="_blank"
-                rel="noopener"
-                class="mt-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
-                style={`background:${cta}`}
-              >
-                <WhatsAppIcon width={16} height={16} class="h-4 w-4" />
-                Pedir por WhatsApp
-              </a>
-            </div>
+          <div class="rounded-2xl border p-6" style={`background:${surface}; border-color:rgba(20,20,20,0.08)`}>
+            <h3 class="font-display text-base font-bold text-[#141414]">{p.name}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-[#141414]/60">{p.desc}</p>
           </div>
         ))}
       </div>
+
+      <a
+        href={whatsappLink('Hola Francy, me interesan los productos del estudio. ¿Cuáles tienes disponibles y a qué precio?', FRANCY.whatsapp)}
+        target="_blank"
+        rel="noopener"
+        class="mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3.5 font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
+        style={`background:${cta}`}
+      >
+        <WhatsAppIcon width={18} height={18} class="h-4.5 w-4.5" />
+        Preguntar por WhatsApp
+      </a>
     </div>
   </section>
 
   <section id="sobre" class="py-24" style={`background:${surface}`}>
     <div class="shell grid items-center gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]">
-      <figure class="relative aspect-[4/5] overflow-hidden rounded-3xl" style="background:linear-gradient(160deg,#25d366,#E9E3D8)" aria-label="Francy Molano Nails Studio en Paipa">
+      <figure class="relative aspect-[4/5] overflow-hidden rounded-3xl" style="background:linear-gradient(160deg,#25d366,#E9E3D8)">
+        <img
+          src={`${photoPath}francy.jpg`}
+          alt="Francy Molano en su estudio de uñas en Paipa"
+          loading="lazy"
+          decoding="async"
+          class="absolute inset-0 h-full w-full object-cover"
+          data-fallback-img
+        />
       </figure>
 
       <div>
