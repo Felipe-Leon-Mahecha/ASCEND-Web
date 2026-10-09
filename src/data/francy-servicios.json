@@ -1,0 +1,237 @@
+{
+  "version": 1,
+  "moneda": "COP",
+  "fuente": "Precios confirmados por la clienta vía WhatsApp el 30/09/2026",
+  "duraciones_confirmadas": false,
+  "slot_min": 15,
+  "buffer_min": 10,
+  "categorias": [
+    { "id": "unas_manos", "nombre": "Uñas · Manos", "icono": "lucide:hand", "orden": 1 },
+    { "id": "unas_pies", "nombre": "Uñas · Pies", "icono": "lucide:footprints", "orden": 2 },
+    { "id": "pestanas", "nombre": "Pestañas", "icono": "lucide:eye", "orden": 3 },
+    { "id": "cejas", "nombre": "Cejas", "icono": "lucide:sparkle", "orden": 4 },
+    { "id": "depilacion", "nombre": "Depilación", "icono": "lucide:scissors", "orden": 5 }
+  ],
+  "servicios": [
+    {
+      "id": "manos-tradicional",
+      "categoria": "unas_manos",
+      "nombre": "Esmaltado tradicional",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 18000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "manos-secado-rapido",
+      "categoria": "unas_manos",
+      "nombre": "Secado rápido",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 20000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "manos-semipermanente",
+      "categoria": "unas_manos",
+      "nombre": "Esmaltado semipermanente",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 50000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "manos-base-rubber",
+      "categoria": "unas_manos",
+      "nombre": "Con base rubber",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 55000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "manos-dipping",
+      "categoria": "unas_manos",
+      "nombre": "Dipping",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 65000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "manos-softgel",
+      "categoria": "unas_manos",
+      "nombre": "Softgel",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 80000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "manos-esculpida-polygel",
+      "categoria": "unas_manos",
+      "nombre": "Esculpida Polygel",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 100000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "manos-esculpida-acrilico",
+      "categoria": "unas_manos",
+      "nombre": "Esculpida en acrílico",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 110000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "pies-tradicional",
+      "categoria": "unas_pies",
+      "nombre": "Esmaltado tradicional",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 22000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "pies-secado-rapido",
+      "categoria": "unas_pies",
+      "nombre": "Secado rápido",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 25000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "pies-semipermanente",
+      "categoria": "unas_pies",
+      "nombre": "Esmaltado semipermanente",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 55000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "pestanas-pelo-a-pelo",
+      "categoria": "pestanas",
+      "nombre": "Extensión pelo a pelo",
+      "descripcion": "",
+      "destacado": true,
+      "variantes": [
+        { "id": "mantenimiento", "nombre": "Mantenimiento", "precio": 50000, "duracion_min": null },
+        { "id": "natural", "nombre": "Efecto natural", "precio": 80000, "duracion_min": null },
+        { "id": "3d", "nombre": "3D o tecnológico", "precio": 90000, "duracion_min": null },
+        { "id": "ruso", "nombre": "Efecto ruso", "precio": 100000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "pestanas-punto-a-punto",
+      "categoria": "pestanas",
+      "nombre": "Punto a punto",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 30000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "pestanas-lifting",
+      "categoria": "pestanas",
+      "nombre": "Lifting de pestañas",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 65000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "cejas-depilacion",
+      "categoria": "cejas",
+      "nombre": "Depilación de cejas",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 12000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "cejas-henna",
+      "categoria": "cejas",
+      "nombre": "Cejas y henna",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 22000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "cejas-diseno",
+      "categoria": "cejas",
+      "nombre": "Diseño de cejas",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 35000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "cejas-laminado",
+      "categoria": "cejas",
+      "nombre": "Laminado de cejas",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 50000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "depilacion-beso",
+      "categoria": "depilacion",
+      "nombre": "Beso",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 8000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "depilacion-axila",
+      "categoria": "depilacion",
+      "nombre": "Axila",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 15000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "depilacion-bikini-medio",
+      "categoria": "depilacion",
+      "nombre": "Bikini medio",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 25000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "depilacion-media-pierna",
+      "categoria": "depilacion",
+      "nombre": "Media pierna",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 25000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "depilacion-bikini-completo",
+      "categoria": "depilacion",
+      "nombre": "Bikini completo",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 40000, "duracion_min": null }
+      ]
+    },
+    {
+      "id": "depilacion-pierna-completa",
+      "categoria": "depilacion",
+      "nombre": "Pierna completa",
+      "descripcion": "",
+      "variantes": [
+        { "id": "estandar", "nombre": "Estándar", "precio": 40000, "duracion_min": null }
+      ]
+    }
+  ]
+}

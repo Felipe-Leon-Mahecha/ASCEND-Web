@@ -1,0 +1,864 @@
+---
+import { catalogo } from '../../lib/francy-catalogo';
+import { CONFIG_POR_DEFECTO } from '../../lib/booking/storage';
+
+const accent = '#8BA99A';
+const accentDeep = 'color-mix(in srgb, #8BA99A 55%, #141414)';
+const cta = '#25D366';
+const ctaDeep = '#1FA855';
+const ink = '#141414';
+const base = '#F5F0E8';
+const borde = '#E4DDD2';
+
+const DIAS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+const MESES = [
+  'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+  'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
+];
+
+const ESTADOS: Record<string, { label: string; color: string; bg: string }> = {
+  pendiente: { label: 'Pendiente', color: '#8a6d1f', bg: '#fdf6e0' },
+  confirmada: { label: 'Confirmada', color: '#2f6f4f', bg: '#e6f4ec' },
+  completada: { label: 'Completada', color: '#5a5a5a', bg: '#ececec' },
+  cancelada: { label: 'Cancelada', color: '#a83f2f', bg: '#fbeae7' },
+  no_asistio: { label: 'No asistió', color: '#7a5aa8', bg: '#f1eafa' },
+};
+---
+
+<div class="fl-panel" data-panel>
+  <div class="fl-topbar">
+    <div class="fl-brand">
+      <span class="fl-dot" style={`background:${accent}`}></span>
+      <div>
+        <p class="fl-brand-name">Agenda</p>
+        <p class="fl-brand-sub">Francy Molano Nails Studio</p>
+      </div>
+    </div>
+    <button type="button" class="fl-icon-btn" data-action="sembrar" title="Cargar datos de prueba">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+    </button>
+  </div>
+
+  <div class="fl-nav">
+    <button type="button" class="fl-nav-btn" data-action="prev" aria-label="Anterior">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    <button type="button" class="fl-hoy" data-action="hoy">Hoy</button>
+    <div class="fl-nav-mid">
+      <p class="fl-periodo" data-periodo>—</p>
+      <p class="fl-subperiodo" data-subperiodo>—</p>
+    </div>
+    <button type="button" class="fl-nav-btn" data-action="next" aria-label="Siguiente">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <div class="fl-views" role="tablist">
+    <button type="button" class="fl-view-btn is-active" data-view="dia" role="tab">Día</button>
+    <button type="button" class="fl-view-btn" data-view="semana" role="tab">Semana</button>
+    <button type="button" class="fl-view-btn" data-view="mes" role="tab">Mes</button>
+  </div>
+
+  <div class="fl-chips" data-chips></div>
+
+  <div class="fl-stats" data-stats></div>
+
+  <div class="fl-body" data-body></div>
+
+  <button type="button" class="fl-fab" data-action="nueva" aria-label="Nueva cita">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+</div>
+
+<div class="fl-sheet-backdrop" data-sheet-backdrop hidden></div>
+
+<div class="fl-sheet" data-sheet hidden role="dialog" aria-modal="true" aria-labelledby="fl-sheet-title">
+  <div class="fl-sheet-grab"></div>
+  <div class="fl-sheet-head">
+    <div>
+      <p class="fl-sheet-eyebrow" data-sheet-eyebrow>—</p>
+      <h2 class="fl-sheet-title" id="fl-sheet-title" data-sheet-title>Detalle</h2>
+    </div>
+    <button type="button" class="fl-icon-btn" data-action="cerrar-sheet" aria-label="Cerrar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="fl-sheet-body" data-sheet-body></div>
+</div>
+
+<script is:inline define:vars={{ accent, accentDeep, cta, ctaDeep, ink, base, borde, DIAS, MESES, ESTADOS, catalogo, CONFIG_POR_DEFECTO }}>
+  (function () {
+    const root = document.querySelector('[data-panel]');
+    if (!root) return;
+
+    const qs = (s) => root.querySelector(s);
+    const qsa = (s) => Array.from(root.querySelectorAll(s));
+
+    const els = {
+      periodo: qs('[data-periodo]'),
+      subperiodo: qs('[data-subperiodo]'),
+      chips: qs('[data-chips]'),
+      stats: qs('[data-stats]'),
+      body: qs('[data-body]'),
+      sheet: document.querySelector('[data-sheet]'),
+      sheetBody: document.querySelector('[data-sheet-body]'),
+      sheetTitle: document.querySelector('[data-sheet-title]'),
+      sheetEyebrow: document.querySelector('[data-sheet-eyebrow]'),
+      backdrop: document.querySelector('[data-sheet-backdrop]'),
+    };
+
+    const K_PRO = 'flws:francy:profesionales:v1';
+    const K_CITAS = 'flws:francy:citas:v1';
+    const K_CFG = 'flws:francy:config:v1';
+
+    const CAT = catalogo;
+    const ESTADOS_MAP = ESTADOS;
+    const CFG = { ...CONFIG_POR_DEFECTO };
+
+    let profesionales = [];
+    let citas = [];
+    let vista = 'dia';
+    let filtroPro = 'todos';
+    let ancla = new Date();
+
+    // ── utilidades ─────────────────────────────────────────────
+    const iso = (d) => {
+      const x = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+      return x.toISOString().slice(0, 10);
+    };
+    const parse = (s) => {
+      const [a, m, d] = s.split('-').map(Number);
+      return new Date(Date.UTC(a, m - 1, d));
+    };
+    const addDays = (d, n) => {
+      const x = new Date(d.getTime());
+      x.setUTCDate(x.getUTCDate() + n);
+      return x;
+    };
+    const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+    const fmtFechaLarga = (d) => {
+      const s = d.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    };
+    const money = (n) => '$' + n.toLocaleString('es-CO');
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const OCUPAN = ['pendiente', 'confirmada', 'completada'];
+    const servicioNombre = (id) => (CAT.servicios.find((s) => s.id === id) || {}).nombre || id;
+    const proNombre = (id) => (profesionales.find((p) => p.id === id) || {}).nombre || 'Sin asignar';
+    const proColor = (id) => (profesionales.find((p) => p.id === id) || {}).color || '#8BA99A';
+    const visible = (c) => filtroPro === 'todos' || c.profesionalId === filtroPro;
+
+    // ── persistencia ────────────────────────────────────────────
+    function cargar() {
+      try {
+        profesionales = JSON.parse(localStorage.getItem(K_PRO) || '[]');
+        citas = JSON.parse(localStorage.getItem(K_CITAS) || '[]');
+        Object.assign(CFG, JSON.parse(localStorage.getItem(K_CFG) || '{}'));
+      } catch (e) { profesionales = []; citas = []; }
+    }
+    const guardar = () => {
+      localStorage.setItem(K_PRO, JSON.stringify(profesionales));
+      localStorage.setItem(K_CITAS, JSON.stringify(citas));
+      localStorage.setItem(K_CFG, JSON.stringify(CFG));
+    };
+
+    // ── datos de prueba ─────────────────────────────────────────
+    function sembrar() {
+      const pal = ['#8BA99A', '#E8A090', '#6D5BFF'];
+      const sem = (a, c, pausa) => [1, 2, 3, 4, 5].map((d) => ({ dia: d, apertura: a, cierre: c, ...(pausa ? { pausa: { inicio: pausa[0], fin: pausa[1] } } : {}) }));
+      profesionales = [
+        { id: 'pro-francy', nombre: 'Francy Molano', activo: true, color: pal[0], horarios: sem(540, 1080, [780, 840]), serviciosIds: [], capacidadDiaria: 7 },
+        { id: 'pro-kelly', nombre: 'Kelly Ortiz', activo: true, color: pal[1], horarios: sem(600, 1140), serviciosIds: [], capacidadDiaria: 7 },
+        { id: 'pro-isabel', nombre: 'Isabel Rojas', activo: true, color: pal[2], horarios: [...sem(540, 840), { dia: 6, apertura: 540, cierre: 780 }], serviciosIds: [], capacidadDiaria: 5 },
+      ];
+
+      const nombres = ['Ana María Restrepo', 'Laura Gómez', 'Sara Mendoza', 'Carolina Ríos', 'Andrea Silva', 'Valentina Cruz', 'Daniela Pérez', 'Camila Torres', 'Mariana López', 'Jessica Duarte', 'Sofía Cárdenas', 'Isabella Núñez', 'Lucía Vargas', 'Paula Hernández', 'Natalia Ortiz', 'Gabriela Rojas'];
+      const t = [
+        ['pro-francy', 540, 120, 110000, 'manos-esculpida-acrilico', 'estandar', 'Esculpida en acrílico', 0],
+        ['pro-francy', 690, 60, 50000, 'manos-semipermanente', 'estandar', 'Esmaltado semipermanente', 1],
+        ['pro-francy', 870, 90, 90000, 'pestanas-pelo-a-pelo', '3d', '3D o tecnológico', 2],
+        ['pro-francy', 975, 30, 12000, 'cejas-depilacion', 'estandar', 'Depilación de cejas', 3],
+        ['pro-kelly', 600, 90, 65000, 'manos-dipping', 'estandar', 'Dipping', 4],
+        ['pro-kelly', 720, 45, 20000, 'manos-secado-rapido', 'estandar', 'Secado rápido', 5],
+        ['pro-kelly', 780, 60, 55000, 'pies-semipermanente', 'estandar', 'Esmaltado semipermanente', 6],
+        ['pro-kelly', 900, 75, 40000, 'depilacion-bikini-completo', 'estandar', 'Bikini completo', 7],
+        ['pro-kelly', 1020, 30, 8000, 'depilacion-beso', 'estandar', 'Beso', 8],
+        ['pro-isabel', 570, 60, 18000, 'manos-tradicional', 'estandar', 'Esmaltado tradicional', 9],
+        ['pro-isabel', 660, 45, 65000, 'pestanas-lifting', 'estandar', 'Lifting de pestañas', 10],
+        ['pro-isabel', 750, 20, 8000, 'depilacion-beso', 'estandar', 'Beso', 11, true],
+      ];
+
+      const hoy = iso(new Date());
+      const out = [];
+      let n = 0;
+      for (let off = -21; off <= 28; off++) {
+        const fecha = iso(addDays(parse(hoy), off));
+        const dow = parse(fecha).getUTCDay();
+        if (dow === 0) continue;
+        for (const [pid, ini, dur, precio, sid, vid, vnom, ci, walk] of t) {
+          const pro = profesionales.find((p) => p.id === pid);
+          if (!pro || !pro.activo) continue;
+          const h = pro.horarios.find((x) => x.dia === dow);
+          if (!h) continue;
+          if (dow === 6 && pid !== 'pro-isabel') continue;
+          if (ini + dur > h.cierre) continue;
+          if (h.pausa && ini < h.pausa.fin && ini + dur > h.pausa.inicio) continue;
+          if (Math.abs(off) % 3 !== 0 && Math.random() > 0.72) continue;
+
+          let estado = 'pendiente';
+          if (off < 0) estado = Math.random() > 0.12 ? 'completada' : 'no_asistio';
+          else if (off === 0) estado = ini < 660 ? 'completada' : 'pendiente';
+          else if (Math.random() > 0.3) estado = 'confirmada';
+
+          n++;
+          out.push({
+            id: 'demo-' + n, profesionalId: pid, servicioId: sid, varianteId: vid, varianteNombre: vnom,
+            clienteNombre: nombres[ci % nombres.length], clienteTelefono: '31055501' + String(ci).padStart(2, '0'),
+            fecha, inicio: ini, duracion: dur, precio, estado,
+            creadaEn: iso(addDays(parse(fecha), -2)) + 'T10:00:00.000Z', esWalkIn: !!walk,
+          });
+        }
+      }
+      citas = out;
+      guardar();
+    }
+
+    // ── rango visible ───────────────────────────────────────────
+    function rango() {
+      if (vista === 'dia') {
+        const f = iso(ancla);
+        return { desde: f, hasta: f, dias: [f] };
+      }
+      if (vista === 'semana') {
+        const dow = (parse(iso(ancla)).getUTCDay() + 6) % 7;
+        const lunes = addDays(ancla, -dow);
+        const dias = [];
+        for (let i = 0; i < 7; i++) dias.push(iso(addDays(lunes, i)));
+        return { desde: dias[0], hasta: dias[6], dias };
+      }
+      const y = ancla.getUTCFullYear(), m = ancla.getUTCMonth();
+      const primero = new Date(Date.UTC(y, m, 1));
+      const lead = (primero.getUTCDay() + 6) % 7;
+      const ini = addDays(primero, -lead);
+      const dias = [];
+      for (let i = 0; i < 42; i++) dias.push(iso(addDays(ini, i)));
+      return { desde: dias[0], hasta: dias[41], dias };
+    }
+
+    function semanasDelMes(dias) {
+      const out = [];
+      for (let i = 0; i < dias.length; i += 7) out.push(dias.slice(i, i + 7));
+      return out;
+    }
+
+    // ── datos calculados ────────────────────────────────────────
+    function delRango() {
+      const r = rango();
+      const todas = citas.filter((c) => c.fecha >= r.desde && c.fecha <= r.hasta && visible(c));
+      const relevantes = todas.filter((c) => OCUPAN.indexOf(c.estado) >= 0);
+      const proIds = filtroPro === 'todos' ? profesionales.map((p) => p.id) : [filtroPro];
+      const capacidad = proIds.reduce((a, id) => a + ((profesionales.find((p) => p.id === id) || {}).capacidadDiaria || 0), 0);
+      const conCita = relevantes.filter((c) => !c.esWalkIn).length;
+      const ingresos = relevantes.filter((c) => c.estado === 'completada').reduce((a, c) => a + c.precio, 0);
+      return {
+        r, todas, relevantes, capacidad,
+        total: relevantes.length,
+        conCita,
+        walkIns: relevantes.filter((c) => c.esWalkIn).length,
+        canceladas: todas.filter((c) => c.estado === 'cancelada' || c.estado === 'no_asistio').length,
+        ocupacion: capacidad ? Math.round((conCita / capacidad) * 100) : 0,
+        ingresos,
+      };
+    }
+
+    // ── pintado: encabezado ─────────────────────────────────────
+    function pintarEncabezado() {
+      const d = ancla;
+      if (vista === 'dia') {
+        els.periodo.textContent = fmtFechaLarga(d);
+        els.subperiodo.textContent = diaNumero(d) === new Date().getDate() ? 'Hoy' : '';
+      } else if (vista === 'semana') {
+        const r = rango();
+        const a = parse(r.dias[0]), b = parse(r.dias[6]);
+        els.periodo.textContent = (MESES[a.getUTCMonth()] || '') + ' — ' + (MESES[b.getUTCMonth()] || '');
+        els.subperiodo.textContent = a.getUTCDate() + ' al ' + b.getUTCDate() + ', ' + b.getUTCFullYear();
+      } else {
+        els.periodo.textContent = (MESES[d.getUTCMonth()] || '');
+        els.subperiodo.textContent = String(d.getUTCFullYear());
+      }
+    }
+    const diaNumero = (d) => d.getDate();
+
+    function pintarChips() {
+      const tot = citas.filter((c) => OCUPAN.indexOf(c.estado) >= 0).length;
+      let html = '<button type="button" class="fl-chip is-active' + (filtroPro === 'todos' ? '' : '') + '" data-pro="todos">Todas <span>' + tot + '</span></button>';
+      for (const p of profesionales) {
+        const n = citas.filter((c) => c.profesionalId === p.id && OCUPAN.indexOf(c.estado) >= 0).length;
+        html += '<button type="button" class="fl-chip' + (filtroPro === p.id ? ' is-active' : '') + '" data-pro="' + p.id + '">' +
+          '<i style="background:' + p.color + '"></i>' + esc(p.nombre.split(' ')[0]) +
+          (p.activo ? '' : ' <em>inactiva</em>') + ' <span>' + n + '</span></button>';
+      }
+      els.chips.innerHTML = html;
+    }
+
+    function pintarStats(d) {
+      const cards = [
+        { l: 'Citas', v: d.total, s: d.walkIns + ' walk-in' },
+        { l: 'Ocupación', v: d.ocupacion + '%', s: d.conCita + ' de ' + d.capacidad + ' cupos' },
+        { l: 'Ingresos', v: money(d.ingresos), s: 'completadas' },
+        { l: 'No vinieron', v: d.canceladas, s: 'canceladas o faltaron' },
+      ];
+      els.stats.innerHTML = cards.map((c) =>
+        '<div class="fl-stat"><p class="fl-stat-l">' + c.l + '</p><p class="fl-stat-v">' + c.v + '</p><p class="fl-stat-s">' + esc(c.s) + '</p></div>'
+      ).join('');
+    }
+
+    // ── pintado: cuerpo ─────────────────────────────────────────
+    function tarjetaCita(c) {
+      const e = ESTADOS_MAP[c.estado] || ESTADOS_MAP.pendiente;
+      const col = proColor(c.profesionalId);
+      return '<button type="button" class="fl-card" data-cita="' + c.id + '" style="--col:' + col + '">' +
+        '<span class="fl-card-bar"></span>' +
+        '<span class="fl-card-hora">' + hhmm(c.inicio) + '</span>' +
+        '<span class="fl-card-body">' +
+          '<span class="fl-card-cliente">' + esc(c.clienteNombre) + (c.esWalkIn ? ' <em class="fl-walk">walk-in</em>' : '') + '</span>' +
+          '<span class="fl-card-serv">' + esc(servicioNombre(c.servicioId)) + ' · ' + esc(c.varianteNombre) + '</span>' +
+          '<span class="fl-card-meta">' + proNombre(c.profesionalId).split(' ')[0] + ' · ' + c.duracion + ' min · ' + money(c.precio) + '</span>' +
+        '</span>' +
+        '<span class="fl-badge" style="color:' + e.color + ';background:' + e.bg + '">' + e.label + '</span>' +
+      '</button>';
+    }
+
+    function pintarDia(d) {
+      const fecha = d.r.desde;
+      const items = d.relevantes.filter((c) => c.fecha === fecha).sort((a, b) => a.inicio - b.inicio);
+      const canceladas = d.todas.filter((c) => c.fecha === fecha && (c.estado === 'cancelada' || c.estado === 'no_asistio')).sort((a, b) => a.inicio - b.inicio);
+      const proIds = (filtroPro === 'todos' ? profesionales : profesionales.filter((p) => p.id === filtroPro));
+      let html = '';
+      let cursor = null;
+
+      for (const c of items) {
+        const fin = c.inicio + c.duracion + CFG.bufferMin;
+        if (cursor !== null && c.inicio - cursor >= 30) html += hueco(cursor, c.inicio);
+        cursor = Math.max(cursor === null ? fin : cursor, fin);
+        html += tarjetaCita(c);
+      }
+
+      if (!items.length) {
+        html = '<div class="fl-empty"><p class="fl-empty-t">Día libre</p><p class="fl-empty-s">No hay citas para este día.</p></div>';
+      }
+
+      if (canceladas.length) {
+        html += '<p class="fl-subtle">Canceladas y no asistieron</p>' + canceladas.map(tarjetaCita).join('');
+      }
+
+      html += '<div class="fl-foot">' + proIds.map((p) => {
+        const n = items.filter((c) => c.profesionalId === p.id && !c.esWalkIn).length;
+        const cap = p.capacidadDiaria;
+        const pct = cap ? Math.round((n / cap) * 100) : 0;
+        return '<div class="fl-cap"><div class="fl-cap-top"><i style="background:' + p.color + '"></i><span>' + esc(p.nombre) + '</span><b>' + n + '/' + cap + '</b></div>' +
+          '<div class="fl-bar"><span style="width:' + Math.min(100, pct) + '%;background:' + p.color + '"></span></div></div>';
+      }).join('') + '</div>';
+
+      els.body.innerHTML = '<div class="fl-dia">' + html + '</div>';
+    }
+
+    function hueco(ini, fin) {
+      const h = Math.round((fin - ini) / 6) / 10;
+      return '<div class="fl-gap"><span>' + h + ' h libre</span></div>';
+    }
+
+    function pintarSemana(d) {
+      const semanas = semanasDelMes(d.r.dias);
+      const hoyIso = iso(new Date());
+      let html = '';
+      for (const sem of semanas) {
+        html += '<div class="fl-week">';
+        for (const f of sem) {
+          const items = d.relevantes.filter((c) => c.fecha === f).sort((a, b) => a.inicio - b.inicio);
+          const dow = parse(f).getUTCDay();
+          const fuera = dow === 0;
+          html += '<div class="fl-wcol' + (f === hoyIso ? ' is-today' : '') + (fuera ? ' is-off' : '') + '">' +
+            '<p class="fl-wcol-h">' + DIAS[(dow + 6) % 7] + ' <b>' + parse(f).getUTCDate() + '</b></p>' +
+            (items.length
+              ? items.slice(0, 6).map((c) => {
+                  const col = proColor(c.profesionalId);
+                  const e = ESTADOS_MAP[c.estado] || ESTADOS_MAP.pendiente;
+                  return '<button type="button" class="fl-witem' + (c.estado === 'cancelada' || c.estado === 'no_asistio' ? ' is-dim' : '') + '" data-cita="' + c.id + '" style="--col:' + col + '">' +
+                    '<span class="fl-witem-h">' + hhmm(c.inicio) + '</span>' +
+                    '<span class="fl-witem-n">' + esc(c.clienteNombre.split(' ')[0]) + '</span>' +
+                    '<span class="fl-witem-s">' + esc(c.varianteNombre) + '</span>' +
+                    '<i class="fl-witem-d" style="background:' + e.bg + ';color:' + e.color + '">' + e.label.charAt(0) + '</i>' +
+                  '</button>';
+                }).join('')
+              : '<p class="fl-wempty">—</p>') +
+            (items.length > 6 ? '<p class="fl-wmore">+' + (items.length - 6) + '</p>' : '') +
+          '</div>';
+        }
+        html += '</div>';
+      }
+      els.body.innerHTML = html;
+    }
+
+    function pintarMes(d) {
+      const hoyIso = iso(new Date());
+      const semanas = semanasDelMes(d.r.dias);
+      let html = '<div class="fl-mhead">' + DIAS.map((x) => '<span>' + x + '</span>').join('') + '</div>';
+      for (const sem of semanas) {
+        html += '<div class="fl-mrow">';
+        for (const f of sem) {
+          const del = d.relevantes.filter((c) => c.fecha === f);
+          const conCita = del.filter((c) => !c.esWalkIn).length;
+          const walk = del.filter((c) => c.esWalkIn).length;
+          const fuera = parse(f).getUTCMonth() !== ancla.getUTCMonth();
+          html += '<button type="button" class="fl-mcell' + (f === hoyIso ? ' is-today' : '') + (fuera ? ' is-off' : '') + '" data-dia="' + f + '">' +
+            '<span class="fl-mcell-d">' + parse(f).getUTCDate() + '</span>' +
+            (conCita || walk ? '<span class="fl-mdots">' + professionalDots(del) + (walk ? '<i class="fl-mdot is-walk"></i>' : '') + '</span>' : '') +
+            (conCita ? '<span class="fl-mcell-n">' + conCita + '</span>' : '') +
+          '</button>';
+        }
+        html += '</div>';
+      }
+      els.body.innerHTML = html;
+    }
+
+    function professionalDots(del) {
+      const ids = [];
+      for (const c of del) if (ids.indexOf(c.profesionalId) < 0) ids.push(c.profesionalId);
+      return ids.slice(0, 3).map((id) => '<i class="fl-mdot" style="background:' + proColor(id) + '"></i>').join('');
+    }
+
+    // ── pintado: hoja de detalle ────────────────────────────────
+    function abrirCita(id) {
+      const c = citas.find((x) => x.id === id);
+      if (!c) return;
+      const e = ESTADOS_MAP[c.estado] || ESTADOS_MAP.pendiente;
+      els.sheetEyebrow.textContent = fmtFechaLarga(parse(c.fecha)) + ' · ' + hhmm(c.inicio);
+      els.sheetTitle.textContent = c.clienteNombre;
+
+      let html = '<div class="fl-dl">' +
+        row('Servicio', servicioNombre(c.servicioId)) +
+        row('Variante', c.varianteNombre) +
+        row('Duración', c.duracion + ' min') +
+        row('Precio', money(c.precio)) +
+        row('Profesional', proNombre(c.profesionalId)) +
+        row('Teléfono', c.clienteTelefono) +
+        row('Estado', e.label) +
+      '</div>';
+
+      html += '<p class="fl-sheet-l">Cambiar estado</p><div class="fl-acciones">';
+      for (const k of Object.keys(ESTADOS_MAP)) {
+        const st = ESTADOS_MAP[k];
+        html += '<button type="button" class="fl-acc' + (c.estado === k ? ' is-on' : '') + '" data-estado="' + k + '" style="color:' + st.color + ';background:' + st.bg + ';border-color:' + st.color + '">' + st.label + '</button>';
+      }
+      html += '</div>';
+
+      html += '<p class="fl-sheet-l">Acciones</p><div class="fl-acciones">' +
+        '<a class="fl-acc fl-acc-wa" href="https://wa.me/57' + c.clienteTelefono.replace(/\D/g, '').slice(-10) + '" target="_blank" rel="noopener">WhatsApp</a>' +
+        '<button type="button" class="fl-acc" data-acc="toggle-walk">Convertir en walk-in</button>' +
+        '<button type="button" class="fl-acc fl-acc-del" data-acc="borrar">Eliminar cita</button>' +
+      '</div>';
+
+      els.sheetBody.innerHTML = html;
+      els.sheetBody.dataset.cita = c.id;
+      mostrarSheet();
+    }
+
+    function row(k, v) {
+      return '<div class="fl-drow"><span>' + k + '</span><b>' + esc(v) + '</b></div>';
+    }
+
+    function abrirNueva() {
+      const fecha = iso(ancla);
+      const proId = filtroPro !== 'todos' ? filtroPro : (profesionales.find((p) => p.activo) || {}).id;
+      els.sheetEyebrow.textContent = fmtFechaLarga(parse(fecha));
+      els.sheetTitle.textContent = 'Nueva cita';
+
+      let html = '<div class="fl-form">';
+      html += '<label class="fl-lb">Cliente</label><input class="fl-in" name="cliente" placeholder="Nombre y apellido" />';
+      html += '<label class="fl-lb">Teléfono</label><input class="fl-in" name="tel" inputmode="tel" placeholder="310 555 0101" />';
+      html += '<label class="fl-lb">Profesional</label><select class="fl-in" name="pro">' +
+        profesionales.filter((p) => p.activo).map((p) => '<option value="' + p.id + '"' + (p.id === proId ? ' selected' : '') + '>' + esc(p.nombre) + '</option>').join('') + '</select>';
+      html += '<label class="fl-lb">Servicio</label><select class="fl-in" name="serv">' +
+        CAT.servicios.map((s) => '<option value="' + s.id + '">' + esc(s.nombre) + ' — ' + money(Math.min.apply(null, s.variantes.map((v) => v.precio))) + '</option>').join('') + '</select>';
+      html += '<label class="fl-lb">Fecha</label><input class="fl-in" type="date" name="fecha" value="' + fecha + '" />';
+      html += '<label class="fl-lb">Hora</label><input class="fl-in" type="time" name="hora" value="09:00" step="900" />';
+      html += '<label class="fl-check"><input type="checkbox" name="walk" /><span>Es walk-in (no bloquea cupos online)</span></label>';
+      html += '<button type="button" class="fl-save" data-acc="crear">Guardar cita</button>';
+      html += '</div>';
+
+      els.sheetBody.innerHTML = html;
+      els.sheetBody.dataset.cita = '';
+      mostrarSheet();
+    }
+
+    function mostrarSheet() {
+      els.sheet.hidden = false;
+      els.backdrop.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+    function cerrarSheet() {
+      els.sheet.hidden = true;
+      els.backdrop.hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    // ── pintado general ─────────────────────────────────────────
+    function pintar() {
+      pintarEncabezado();
+      pintarChips();
+      const d = delRango();
+      pintarStats(d);
+      if (vista === 'dia') pintarDia(d);
+      else if (vista === 'semana') pintarSemana(d);
+      else pintarMes(d);
+      enlazar();
+    }
+
+    function mover(n) {
+      if (vista === 'dia') ancla = addDays(ancla, n);
+      else if (vista === 'semana') ancla = addDays(ancla, n * 7);
+      else {
+        const x = new Date(ancla.getTime());
+        x.setUTCDate(1);
+        x.setUTCMonth(x.getUTCMonth() + n);
+        ancla = x;
+      }
+      pintar();
+    }
+
+    // ── eventos ─────────────────────────────────────────────────
+    function enlazar() {
+      qsa('[data-pro]').forEach((b) => b.addEventListener('click', () => { filtroPro = b.dataset.pro; pintar(); }));
+      qsa('[data-cita]').forEach((b) => b.addEventListener('click', () => abrirCita(b.dataset.cita)));
+      qsa('[data-dia]').forEach((b) => b.addEventListener('click', () => { ancla = parse(b.dataset.dia); vista = 'dia'; sincronizarVistas(); pintar(); }));
+
+      qsa('[data-estado]').forEach((b) => b.addEventListener('click', () => {
+        const c = citas.find((x) => x.id === els.sheetBody.dataset.cita);
+        if (!c) return;
+        c.estado = b.dataset.estado;
+        guardar();
+        cerrarSheet();
+        pintar();
+      }));
+
+      qsa('[data-acc]').forEach((b) => b.addEventListener('click', () => {
+        const a = b.dataset.acc;
+        const id = els.sheetBody.dataset.cita;
+
+        if (a === 'borrar') {
+          citas = citas.filter((x) => x.id !== id);
+          guardar(); cerrarSheet(); pintar(); return;
+        }
+        if (a === 'toggle-walk') {
+          const c = citas.find((x) => x.id === id);
+          if (c) { c.esWalkIn = !c.esWalkIn; guardar(); cerrarSheet(); pintar(); }
+          return;
+        }
+        if (a === 'crear') {
+          const q = (n) => els.sheetBody.querySelector('[name="' + n + '"]');
+          const nombre = (q('cliente').value || '').trim();
+          if (!nombre) { q('cliente').focus(); return; }
+          const sid = q('serv').value;
+          const s = CAT.servicios.find((x) => x.id === sid) || CAT.servicios[0];
+          const v = s.variantes[0];
+          const hm = (q('hora').value || '09:00').split(':');
+          citas.push({
+            id: 'u' + Date.now(), profesionalId: q('pro').value, servicioId: sid,
+            varianteId: v.id, varianteNombre: v.nombre,
+            clienteNombre: nombre, clienteTelefono: (q('tel').value || '').trim(),
+            fecha: q('fecha').value || iso(ancla),
+            inicio: Number(hm[0]) * 60 + Number(hm[1]), duracion: v.duracion_min || 60,
+            precio: v.precio, estado: 'confirmada',
+            creadaEn: new Date().toISOString(), esWalkIn: q('walk').checked,
+          });
+          guardar(); cerrarSheet(); pintar();
+        }
+      }));
+    }
+
+    function sincronizarVistas() {
+      qsa('[data-view]').forEach((b) => b.classList.toggle('is-active', b.dataset.view === vista));
+    }
+
+    qsa('[data-view]').forEach((b) => b.addEventListener('click', () => { vista = b.dataset.view; sincronizarVistas(); pintar(); }));
+    qs('[data-action="prev"]').addEventListener('click', () => mover(-1));
+    qs('[data-action="next"]').addEventListener('click', () => mover(1));
+    qs('[data-action="hoy"]').addEventListener('click', () => { ancla = new Date(); pintar(); });
+    qs('[data-action="nueva"]').addEventListener('click', abrirNueva);
+    qs('[data-action="cerrar-sheet"]').addEventListener('click', cerrarSheet);
+    els.backdrop.addEventListener('click', cerrarSheet);
+    qs('[data-action="sembrar"]').addEventListener('click', () => { sembrar(); pintar(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarSheet(); });
+
+    cargar();
+    if (!profesionales.length) sembrar();
+    pintar();
+  })();
+</script>
+
+<style>
+  .fl-panel {
+    --ink: #141414;
+    --base: #F5F0E8;
+    --borde: #E4DDD2;
+    --cta: #25D366;
+    min-height: 100dvh;
+    background: #FBF9F6;
+    color: var(--ink);
+    font-family: 'Inter Variable', 'Inter', system-ui, sans-serif;
+    padding: 0 0 90px;
+  }
+
+  .fl-topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px; background: #fff; border-bottom: 1px solid var(--borde);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .fl-brand { display: flex; align-items: center; gap: 10px; }
+  .fl-dot { width: 12px; height: 12px; border-radius: 50%; display: block; }
+  .fl-brand-name { font-weight: 700; font-size: 15px; letter-spacing: -0.2px; }
+  .fl-brand-sub { font-size: 11.5px; color: #7A746C; }
+  .fl-icon-btn {
+    width: 36px; height: 36px; border-radius: 11px; border: 1px solid var(--borde);
+    background: #fff; color: var(--ink); display: grid; place-items: center; cursor: pointer;
+  }
+  .fl-icon-btn:hover { background: var(--base); }
+
+  .fl-nav {
+    display: flex; align-items: center; gap: 8px;
+    padding: 14px 16px 10px; background: #fff;
+  }
+  .fl-nav-btn {
+    width: 34px; height: 34px; flex: none; border-radius: 10px;
+    border: 1px solid var(--borde); background: #fff; color: var(--ink);
+    display: grid; place-items: center; cursor: pointer;
+  }
+  .fl-nav-btn:hover { background: var(--base); }
+  .fl-hoy {
+    flex: none; padding: 7px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    border: 1px solid var(--borde); background: #fff; color: var(--ink); cursor: pointer;
+  }
+  .fl-nav-mid { flex: 1; text-align: center; min-width: 0; }
+  .fl-periodo {
+    font-size: 15px; font-weight: 700; letter-spacing: -0.3px;
+    text-transform: capitalize; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .fl-subperiodo { font-size: 11.5px; color: #7A746C; }
+
+  .fl-views {
+    display: flex; gap: 4px; padding: 0 16px 12px; background: #fff;
+    border-bottom: 1px solid var(--borde);
+  }
+  .fl-view-btn {
+    padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 600;
+    border: 1px solid transparent; background: transparent; color: #6E6862; cursor: pointer;
+  }
+  .fl-view-btn.is-active { background: var(--ink); color: #fff; }
+
+  .fl-chips {
+    display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto;
+    scrollbar-width: none; background: #FBF9F6;
+  }
+  .fl-chips::-webkit-scrollbar { display: none; }
+  .fl-chip {
+    flex: none; display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    border: 1px solid var(--borde); background: #fff; color: #4A453F; cursor: pointer; white-space: nowrap;
+  }
+  .fl-chip i { width: 8px; height: 8px; border-radius: 50%; display: block; }
+  .fl-chip em { font-style: normal; font-size: 10px; color: #A0978C; font-weight: 500; }
+  .fl-chip span { font-variant-numeric: tabular-nums; color: #948C81; font-weight: 500; }
+  .fl-chip.is-active { border-color: var(--ink); color: var(--ink); }
+
+  .fl-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    padding: 0 16px 14px;
+  }
+  .fl-stat {
+    background: #fff; border: 1px solid var(--borde); border-radius: 14px;
+    padding: 10px 10px 11px; min-width: 0;
+  }
+  .fl-stat-l { font-size: 10.5px; color: #8B8377; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  .fl-stat-v {
+    font-size: 19px; font-weight: 700; letter-spacing: -0.6px; margin-top: 3px;
+    font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis;
+  }
+  .fl-stat-s { font-size: 10.5px; color: #9A9186; margin-top: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .fl-body { padding: 0 16px; }
+
+  .fl-dia { display: flex; flex-direction: column; gap: 8px; }
+
+  .fl-card {
+    display: flex; align-items: stretch; gap: 11px; width: 100%; text-align: left;
+    background: #fff; border: 1px solid var(--borde); border-radius: 16px;
+    padding: 12px 13px 12px 0; cursor: pointer; overflow: hidden;
+    transition: transform 0.12s ease, border-color 0.12s ease;
+  }
+  .fl-card:hover { border-color: #C9C0B3; }
+  .fl-card:active { transform: scale(0.995); }
+  .fl-card-bar { width: 4px; flex: none; background: var(--col); border-radius: 0 4px 4px 0; }
+  .fl-card-hora {
+    flex: none; width: 46px; padding-left: 11px;
+    font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; padding-top: 1px;
+  }
+  .fl-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .fl-card-cliente { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; }
+  .fl-walk {
+    font-style: normal; font-size: 9.5px; font-weight: 700; letter-spacing: 0.4px;
+    background: #EFE9DF; color: #7A6A52; padding: 2px 5px; border-radius: 5px; text-transform: uppercase;
+  }
+  .fl-card-serv { font-size: 12.5px; color: #6E6862; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fl-card-meta { font-size: 11.5px; color: #9A9186; }
+  .fl-badge {
+    flex: none; align-self: center; font-size: 10.5px; font-weight: 700;
+    padding: 4px 8px; border-radius: 999px; white-space: nowrap;
+  }
+
+  .fl-gap {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 7px 0; color: #A89F93; font-size: 11.5px;
+  }
+  .fl-gap::before, .fl-gap::after { content: ''; height: 1px; background: #EAE3D8; flex: 1; }
+
+  .fl-subtle {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700;
+    color: #A29A8F; margin-top: 14px; padding-left: 2px;
+  }
+
+  .fl-empty {
+    text-align: center; padding: 54px 20px; background: #fff;
+    border: 1px dashed var(--borde); border-radius: 18px;
+  }
+  .fl-empty-t { font-size: 16px; font-weight: 700; }
+  .fl-empty-s { font-size: 13px; color: #8B8377; margin-top: 3px; }
+
+  .fl-foot { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .fl-cap { background: #fff; border: 1px solid var(--borde); border-radius: 14px; padding: 11px 13px; }
+  .fl-cap-top { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; }
+  .fl-cap-top i { width: 8px; height: 8px; border-radius: 50%; }
+  .fl-cap-top b { margin-left: auto; font-variant-numeric: tabular-nums; font-size: 12px; }
+  .fl-bar { height: 6px; background: #F0EAE0; border-radius: 999px; margin-top: 8px; overflow: hidden; }
+  .fl-bar span { display: block; height: 100%; border-radius: 999px; transition: width 0.3s ease; }
+
+  .fl-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 6px; }
+  .fl-wcol { background: #fff; border: 1px solid var(--borde); border-radius: 12px; padding: 7px 5px; min-height: 92px; }
+  .fl-wcol.is-today { border-color: var(--ink); }
+  .fl-wcol.is-off { opacity: 0.45; }
+  .fl-wcol-h { font-size: 10px; color: #8B8377; text-align: center; font-weight: 600; text-transform: uppercase; }
+  .fl-wcol-h b { display: block; font-size: 14px; color: var(--ink); font-weight: 700; }
+  .fl-witem {
+    display: block; width: 100%; text-align: left; margin-top: 5px; cursor: pointer;
+    border: 1px solid var(--borde); border-left: 3px solid var(--col);
+    border-radius: 8px; padding: 4px 5px; background: #FCFAF7;
+  }
+  .fl-witem.is-dim { opacity: 0.5; }
+  .fl-witem-h { font-size: 9.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .fl-witem-n { font-size: 10.5px; font-weight: 600; display: block; line-height: 1.2; }
+  .fl-witem-s { font-size: 9px; color: #8B8377; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fl-witem-d {
+    font-style: normal; font-size: 8px; font-weight: 700; padding: 1px 3px;
+    border-radius: 3px; display: inline-block; margin-top: 2px;
+  }
+  .fl-wempty { text-align: center; color: #D5CDC0; font-size: 13px; padding: 14px 0; }
+  .fl-wmore { text-align: center; font-size: 10px; color: #8B8377; font-weight: 600; margin-top: 4px; }
+
+  .fl-mhead { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; }
+  .fl-mhead span { text-align: center; font-size: 10px; color: #8B8377; font-weight: 600; text-transform: uppercase; }
+  .fl-mrow { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 4px; }
+  .fl-mcell {
+    background: #fff; border: 1px solid var(--borde); border-radius: 10px;
+    padding: 6px 4px 7px; min-height: 62px; cursor: pointer; display: flex;
+    flex-direction: column; align-items: center; gap: 4px;
+  }
+  .fl-mcell.is-today { border-color: var(--ink); border-width: 2px; }
+  .fl-mcell.is-off { opacity: 0.35; }
+  .fl-mcell-d { font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .fl-mdots { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; }
+  .fl-mdot { width: 5px; height: 5px; border-radius: 50%; display: block; }
+  .fl-mdot.is-walk { background: #C9BFAF !important; }
+  .fl-mcell-n { font-size: 9.5px; font-weight: 700; color: #8B8377; }
+
+  .fl-fab {
+    position: fixed; right: 16px; bottom: 20px; z-index: 25;
+    width: 54px; height: 54px; border-radius: 50%; border: none;
+    background: var(--cta); color: #141414; cursor: pointer;
+    display: grid; place-items: center;
+    box-shadow: 0 8px 22px rgba(37, 211, 102, 0.4);
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .fl-fab:hover { background: #1FA855; transform: translateY(-2px); }
+
+  .fl-sheet-backdrop {
+    position: fixed; inset: 0; background: rgba(20, 20, 20, 0.4);
+    z-index: 40; backdrop-filter: blur(2px);
+  }
+  .fl-sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    background: #fff; border-radius: 22px 22px 0 0;
+    padding: 10px 18px calc(22px + env(safe-area-inset-bottom));
+    max-height: 88dvh; overflow-y: auto;
+    animation: flUp 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes flUp { from { transform: translateY(100%); } to { transform: none; } }
+  .fl-sheet-grab { width: 40px; height: 4px; border-radius: 999px; background: #E0D8CC; margin: 0 auto 14px; }
+  .fl-sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .fl-sheet-eyebrow { font-size: 11.5px; color: #8B8377; text-transform: capitalize; }
+  .fl-sheet-title { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+  .fl-sheet-body { margin-top: 18px; }
+
+  .fl-dl { border: 1px solid var(--borde); border-radius: 14px; overflow: hidden; }
+  .fl-drow {
+    display: flex; justify-content: space-between; gap: 14px;
+    padding: 10px 13px; font-size: 13px; border-bottom: 1px solid #F2ECE3;
+  }
+  .fl-drow:last-child { border-bottom: none; }
+  .fl-drow span { color: #8B8377; }
+  .fl-drow b { text-align: right; }
+
+  .fl-sheet-l {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700;
+    color: #A29A8F; margin: 20px 0 8px;
+  }
+  .fl-acciones { display: flex; flex-wrap: wrap; gap: 7px; }
+  .fl-acc {
+    padding: 8px 13px; border-radius: 10px; font-size: 12.5px; font-weight: 600;
+    border: 1px solid; background: #fff; cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center;
+  }
+  .fl-acc.is-on { box-shadow: inset 0 0 0 2px currentColor; }
+  .fl-acc-wa { color: #25D366; background: #F0FBF4; border-color: #25D366; }
+  .fl-acc-del { color: #a83f2f; background: #FBF1EF; border-color: #d9a79e; }
+
+  .fl-form { display: flex; flex-direction: column; gap: 4px; }
+  .fl-lb { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; color: #8B8377; margin-top: 12px; }
+  .fl-in {
+    width: 100%; padding: 11px 13px; font-size: 14px; font-family: inherit;
+    border: 1px solid var(--borde); border-radius: 12px; background: #FCFAF7; color: var(--ink);
+  }
+  .fl-in:focus { outline: 2px solid #8BA99A; outline-offset: 1px; border-color: transparent; }
+  .fl-check { display: flex; align-items: center; gap: 9px; margin-top: 16px; font-size: 13px; }
+  .fl-save {
+    margin-top: 18px; padding: 14px; border-radius: 14px; border: none;
+    background: var(--cta); color: #141414; font-size: 15px; font-weight: 700; cursor: pointer;
+  }
+  .fl-save:hover { background: #1FA855; }
+
+  @media (min-width: 640px) {
+    .fl-panel { padding-bottom: 40px; }
+    .fl-stats { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .fl-body { padding: 0 24px; }
+    .fl-chips, .fl-nav, .fl-views, .fl-topbar { padding-left: 24px; padding-right: 24px; }
+    .fl-sheet { left: 50%; transform: translateX(-50%); width: min(560px, 100%); border-radius: 22px; bottom: 20px; }
+    @keyframes flUp { from { transform: translate(-50%, 100%); } to { transform: translate(-50%, 0); } }
+    .fl-wcol { min-height: 120px; }
+    .fl-witem-s { font-size: 10px; }
+    .fl-mcell { min-height: 88px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fl-sheet { animation: none; }
+    .fl-fab, .fl-card, .fl-bar span { transition: none; }
+  }
+</style>

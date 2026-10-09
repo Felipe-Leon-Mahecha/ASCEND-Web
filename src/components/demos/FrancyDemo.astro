@@ -16,6 +16,7 @@ const ocupadas: Record<string, string[]> = Object.values(ocupadasGlob)[0]?.defau
 
 const accent = '#8BA99A';
 const accentDeep = 'color-mix(in srgb, #8BA99A 60%, #141414)';
+const cta = '#25D366';
 const coral = '#E8A090';
 const base = '#F5F0E8';
 const surface = '#FFFFFF';
@@ -26,9 +27,9 @@ const photoPath = '/clientes/francy/';
 const wa = whatsappLink('Hola Francy, quiero agendar una cita en el estudio. ¿Me cuentas la disponibilidad?', FRANCY.whatsapp);
 
 const heroShots = [
-  { img: `${photoPath}hero-1.jpg`, label: 'Semipermanente', icon: 'lucide:sparkles', grad: 'linear-gradient(150deg,#8BA99A 0%,#C9D8CF 60%,#F5F0E8 100%)' },
-  { img: `${photoPath}hero-2.jpg`, label: 'Acrílicas', icon: 'lucide:gem', grad: 'linear-gradient(150deg,#E8A090 0%,#F1CFC4 55%,#F5F0E8 100%)' },
-  { img: `${photoPath}hero-3.jpg`, label: 'Pestañas', icon: 'lucide:eye', grad: 'linear-gradient(150deg,#141414 0%,#5F6F66 55%,#C9D8CF 100%)' },
+  { img: '', label: 'Semipermanente', icon: 'lucide:sparkles', grad: 'linear-gradient(150deg,#25d366 0%,#C9D8CF 60%,#F5F0E8 100%)' },
+  { img: '', label: 'Acrílicas', icon: 'lucide:gem', grad: 'linear-gradient(150deg,#E8A090 0%,#F1CFC4 55%,#F5F0E8 100%)' },
+  { img: '', label: 'Pestañas', icon: 'lucide:eye', grad: 'linear-gradient(150deg,#141414 0%,#5F6F66 55%,#C9D8CF 100%)' },
 ];
 
 const serviceGroups = [
@@ -82,13 +83,13 @@ const cierre = FRANCY.closing;
 
 const gallery = [
   { img: `${photoPath}galeria-1.jpg`, cat: 'semipermanente', alt: 'Uñas semipermanentes en tono nude', grad: 'linear-gradient(140deg,#F1CFC4,#E8A090)' },
-  { img: `${photoPath}galeria-2.jpg`, cat: 'acrilicas', alt: 'Uñas acrílicas almendra con francés', grad: 'linear-gradient(140deg,#C9D8CF,#8BA99A)' },
+  { img: `${photoPath}galeria-2.jpg`, cat: 'acrilicas', alt: 'Uñas acrílicas almendra con francés', grad: 'linear-gradient(140deg,#C9D8CF,#25d366)' },
   { img: `${photoPath}galeria-3.jpg`, cat: 'cejas', alt: 'Cejas laminadas con diseño natural', grad: 'linear-gradient(140deg,#E9E3D8,#B9A894)' },
   { img: `${photoPath}galeria-4.jpg`, cat: 'semipermanente', alt: 'Semipermanente con detalles dorados', grad: 'linear-gradient(140deg,#F5F0E8,#C9D8CF)' },
-  { img: `${photoPath}galeria-5.jpg`, cat: 'acrilicas', alt: 'Acrílicas largas con encapsulado', grad: 'linear-gradient(140deg,#8BA99A,#5F6F66)' },
+  { img: `${photoPath}galeria-5.jpg`, cat: 'acrilicas', alt: 'Acrílicas largas con encapsulado', grad: 'linear-gradient(140deg,#25d366,#5F6F66)' },
   { img: `${photoPath}galeria-6.jpg`, cat: 'cejas', alt: 'Extensiones de pestañas efecto rímel', grad: 'linear-gradient(140deg,#141414,#5F6F66)' },
   { img: `${photoPath}galeria-7.jpg`, cat: 'semipermanente', alt: 'Manicure ruso con esmalte rosado', grad: 'linear-gradient(140deg,#F1CFC4,#C9D8CF)' },
-  { img: `${photoPath}galeria-8.jpg`, cat: 'acrilicas', alt: 'Press-on con arte a mano alzada', grad: 'linear-gradient(140deg,#E8A090,#8BA99A)' },
+  { img: `${photoPath}galeria-8.jpg`, cat: 'acrilicas', alt: 'Press-on con arte a mano alzada', grad: 'linear-gradient(140deg,#E8A090,#25d366)' },
 ];
 
 const filters = [
@@ -99,7 +100,7 @@ const filters = [
 ];
 
 const products = [
-  { img: `${photoPath}producto-base-titanio.jpg`, name: "Base Uñas de Titanio Chic's", price: '$32.000', desc: 'Base fortalecedora que evita que la uña natural se quiebre.', grad: 'linear-gradient(150deg,#C9D8CF,#8BA99A)' },
+  { img: `${photoPath}producto-base-titanio.jpg`, name: "Base Uñas de Titanio Chic's", price: '$32.000', desc: 'Base fortalecedora que evita que la uña natural se quiebre.', grad: 'linear-gradient(150deg,#C9D8CF,#25d366)' },
   { img: `${photoPath}producto-oleo-organic.jpg`, name: 'Óleo de cutícula Organic', price: '$18.000', desc: 'Aceite nutritivo para cutícula seca. Uso diario.', grad: 'linear-gradient(150deg,#F1CFC4,#E8A090)' },
   { img: `${photoPath}producto-smoothie-mara.jpg`, name: 'Smoothie Mara 350 ml', price: '$38.000', desc: 'Crema corporal humectante de absorción rápida.', grad: 'linear-gradient(150deg,#F5F0E8,#B9A894)' },
   { img: `${photoPath}producto-serum-bioaqua.jpg`, name: 'Sérum BIOAQUA para pestañas', price: '$25.000', desc: 'Sérum de crecimiento para pestañas y cejas.', grad: 'linear-gradient(150deg,#5F6F66,#141414)' },
@@ -110,13 +111,6 @@ const values = [
   { icon: 'lucide:heart-handshake', title: 'Trato cercano', desc: 'Te escucho antes de empezar y trabajamos el diseño juntas.' },
   { icon: 'lucide:award', title: 'Producto profesional', desc: 'Marcas certificadas para que el trabajo dure lo que promete.' },
 ];
-
-const testimonials = [
-  { text: 'Me hice semipermanente y llegué a las tres semanas sin un solo levantamiento. Francy tiene una mano increíble.', name: 'Laura M.', tag: 'Semipermanente' },
-  { text: 'Las cejas me cambiaron la cara. Me explicó qué forma me servía y quedaron perfectas.', name: 'Yuli C.', tag: 'Diseño de cejas' },
-  { text: 'El estudio es súper limpio y tranquilo. Salgo de ahí como si hubiera ido a un spa.', name: 'Daniela R.', tag: 'Pedicure spa' },
-];
-
 
 const faqs = [
   { q: '¿Necesito agendar o puedo llegar directo?', a: 'Trabajo con cita para dedicarle el tiempo completo a cada clienta. Escríbeme por WhatsApp y te paso los cupos libres de la semana.' },
@@ -136,8 +130,13 @@ const jsonLd = {
   priceRange: FRANCY.priceRange,
   currenciesAccepted: FRANCY.currency,
   paymentAccepted: 'Efectivo, Nequi, Daviplata, transferencia bancaria',
-  image: `${photoPath}francy.jpg`,
+  image: `${photoPath}og.jpg`,
   logo: `${photoPath}logo.png`,
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: FRANCY.googleRating,
+    reviewCount: FRANCY.googleReviews,
+  },
   areaServed: [
     { '@type': 'City', name: 'Paipa' },
     { '@type': 'City', name: 'Duitama' },
@@ -252,14 +251,16 @@ const jsonLd = {
     <div class="shell grid gap-4 sm:grid-cols-3">
       {heroShots.map((s) => (
         <figure class="relative aspect-[4/5] overflow-hidden rounded-3xl" style={`background:${s.grad}`}>
-          <img
-            src={s.img}
-            alt={`Trabajo de ${s.label} en Francy Molano Nails Studio`}
-            loading="lazy"
-            decoding="async"
-            class="absolute inset-0 h-full w-full object-cover"
-            data-fallback-img
-          />
+          {s.img !== '' && (
+            <img
+              src={s.img}
+              alt={`Trabajo de ${s.label} en Francy Molano Nails Studio`}
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 h-full w-full object-cover"
+              data-fallback-img
+            />
+          )}
           <figcaption class="absolute inset-x-0 bottom-0 flex items-center gap-2 p-5 text-sm font-semibold text-white" style="background:linear-gradient(to top,rgba(20,20,20,0.55),transparent)">
             <Icon name={s.icon} width={16} height={16} class="h-4 w-4" />
             {s.label}
@@ -307,7 +308,7 @@ const jsonLd = {
                   target="_blank"
                   rel="noopener"
                   class="mt-5 inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
-                  style={`background:${accent}`}
+                  style={`background:${cta}`}
                 >
                   <WhatsAppIcon width={16} height={16} class="h-4 w-4" />
                   Agendar
@@ -388,7 +389,7 @@ const jsonLd = {
           target="_blank"
           rel="noopener"
           class="mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3.5 font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
-          style={`background:${accent}`}
+          style={`background:${cta}`}
         >
           <WhatsAppIcon width={18} height={18} class="h-4.5 w-4.5" />
           Agendar cejas
@@ -475,7 +476,7 @@ const jsonLd = {
                 target="_blank"
                 rel="noopener"
                 class="mt-4 inline-flex items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
-                style={`background:${accent}`}
+                style={`background:${cta}`}
               >
                 <WhatsAppIcon width={16} height={16} class="h-4 w-4" />
                 Pedir por WhatsApp
@@ -489,15 +490,7 @@ const jsonLd = {
 
   <section id="sobre" class="py-24" style={`background:${surface}`}>
     <div class="shell grid items-center gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]">
-      <figure class="relative aspect-[4/5] overflow-hidden rounded-3xl" style="background:linear-gradient(160deg,#8BA99A,#E9E3D8)">
-        <img
-          src={`${photoPath}francy.jpg`}
-          alt="Francy Molano en su estudio de uñas en Paipa"
-          loading="lazy"
-          decoding="async"
-          class="absolute inset-0 h-full w-full object-cover"
-          data-fallback-img
-        />
+      <figure class="relative aspect-[4/5] overflow-hidden rounded-3xl" style="background:linear-gradient(160deg,#25d366,#E9E3D8)" aria-label="Francy Molano Nails Studio en Paipa">
       </figure>
 
       <div>
@@ -545,7 +538,7 @@ const jsonLd = {
         <ol class="space-y-8">
           <li>
             <label for="agenda-servicio" class="flex items-center gap-3 text-sm font-bold text-[#141414]">
-              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${accent}`}>1</span>
+              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${cta}`}>1</span>
               ¿Qué te vas a hacer?
             </label>
             <select
@@ -567,7 +560,7 @@ const jsonLd = {
 
           <li>
             <label for="agenda-fecha" class="flex items-center gap-3 text-sm font-bold text-[#141414]">
-              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${accent}`}>2</span>
+              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${cta}`}>2</span>
               ¿Qué día te queda bien?
             </label>
             <input
@@ -586,7 +579,7 @@ const jsonLd = {
 
           <li>
             <span class="flex items-center gap-3 text-sm font-bold text-[#141414]">
-              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${accent}`}>3</span>
+              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${cta}`}>3</span>
               Elige la hora
             </span>
             <div role="radiogroup" aria-label="Hora disponible" class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -611,7 +604,7 @@ const jsonLd = {
 
           <li>
             <label for="agenda-nombre" class="flex items-center gap-3 text-sm font-bold text-[#141414]">
-              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${accent}`}>4</span>
+              <span class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#141414]" style={`background:${cta}`}>4</span>
               ¿Cómo te llamas?
             </label>
             <input
@@ -639,7 +632,7 @@ const jsonLd = {
           type="submit"
           data-agenda-submit
           class="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 text-base font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
-          style={`background:${accent}`}
+          style={`background:${cta}`}
         >
           <WhatsAppIcon width={20} height={20} class="h-5 w-5" />
           Confirmar por WhatsApp
@@ -663,7 +656,7 @@ const jsonLd = {
       <div class="mt-12 grid gap-5 lg:grid-cols-2">
         <div class="overflow-hidden rounded-3xl border" style={`border-color:rgba(20,20,20,0.08); background:${surface}`}>
           <iframe
-            src="https://www.google.com/maps?q=Paipa,%20Boyac%C3%A1,%20Colombia&output=embed"
+            src="https://www.google.com/maps?q=Cra.+22+%2326-63,+Paipa,+Boyac%C3%A1,+Colombia&output=embed"
             title="Ubicación de Francy Molano Nails Studio en Paipa, Boyacá"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
@@ -680,7 +673,7 @@ const jsonLd = {
             <p class="mt-4 leading-relaxed text-[#141414]/65">
               {FRANCY.address}
               <br />
-              A dos cuadras del parque principal, segundo piso. Tel. {FRANCY.phoneDisplay}
+              Tel. {FRANCY.phoneDisplay}
             </p>
           </div>
 
@@ -700,7 +693,7 @@ const jsonLd = {
             <a
               href="#agenda"
               class="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
-              style={`background:${accent}`}
+              style={`background:${cta}`}
             >
               <Icon name="lucide:calendar-plus" width={18} height={18} class="h-4.5 w-4.5" />
               Elegir hora
@@ -714,24 +707,51 @@ const jsonLd = {
   <section id="testimonios" class="py-24" style={`background:${surface}`}>
     <div class="shell">
       <div class="max-w-2xl">
-        <h2 class="display text-3xl text-[#141414] sm:text-5xl">Lo que dicen mis clientas</h2>
+        <h2 class="display text-3xl text-[#141414] sm:text-5xl">Lo que dicen en Google</h2>
+        <p class="mt-5 text-[#141414]/60">Reseñas reales de clientas en el perfil del estudio.</p>
       </div>
 
-      <div class="mt-12 grid gap-5 md:grid-cols-3">
-        {testimonials.map((t) => (
-          <figure class="flex flex-col rounded-3xl border p-7" style={`background:${base}; border-color:rgba(20,20,20,0.08)`}>
-            <div class="flex gap-1" aria-label="Calificación 5 de 5">
-              {[0, 1, 2, 3, 4].map(() => (
-                <Icon name="lucide:star" width={16} height={16} class="h-4 w-4 fill-current" style={`color:${coral}`} />
-              ))}
+      <div class="mt-12 grid gap-5 md:grid-cols-2">
+        <div class="flex flex-col items-start rounded-3xl border p-8" style={`background:${base}; border-color:rgba(20,20,20,0.08)`}>
+          <div class="flex items-end gap-3">
+            <span class="font-display text-6xl font-bold text-[#141414]">{String(FRANCY.googleRating).replace('.', ',')}</span>
+            <div class="pb-2">
+              <div class="flex gap-1" aria-label={`Calificación ${FRANCY.googleRating} de 5`}>
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <Icon name="lucide:star" width={18} height={18} class="h-4.5 w-4.5 fill-current" style={`color:${i < Math.round(FRANCY.googleRating) ? coral : 'rgba(20,20,20,0.15)'}`} />
+                ))}
+              </div>
+              <p class="mt-1 text-sm text-[#141414]/55">{FRANCY.googleReviews} reseñas en Google</p>
             </div>
-            <blockquote class="mt-5 flex-1 leading-relaxed text-[#141414]/75">“{t.text}”</blockquote>
-            <figcaption class="mt-6">
-              <span class="font-display font-bold text-[#141414]">{t.name}</span>
-              <span class="mt-0.5 block text-sm text-[#141414]/50">{t.tag}</span>
-            </figcaption>
-          </figure>
-        ))}
+          </div>
+          <a
+            href={FRANCY.mapsUrl}
+            target="_blank"
+            rel="noopener"
+            class="mt-7 inline-flex items-center gap-2 rounded-full px-6 py-3 font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
+            style={`background:${cta}`}
+          >
+            <Icon name="lucide:map-pin" width={18} height={18} class="h-4.5 w-4.5" />
+            Leer las reseñas
+          </a>
+        </div>
+
+        <div class="flex flex-col items-start justify-center rounded-3xl border p-8" style={`background:${surface}; border-color:rgba(20,20,20,0.08)`}>
+          <h3 class="font-display text-xl font-bold text-[#141414]">¿Ya viniste? Cuéntale a otras</h3>
+          <p class="mt-3 leading-relaxed text-[#141414]/65">
+            Tu reseña en Google ayuda a que más personas de Paipa encuentren el estudio. Tarda menos de un minuto.
+          </p>
+          <a
+            href={FRANCY.mapsUrl}
+            target="_blank"
+            rel="noopener"
+            class="mt-6 inline-flex items-center gap-2 rounded-full border px-6 py-3 font-bold text-[#141414] transition-transform hover:-translate-y-0.5"
+            style="border-color:rgba(20,20,20,0.15)"
+          >
+            <Icon name="lucide:pen-line" width={18} height={18} class="h-4.5 w-4.5" />
+            Dejar mi reseña
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -789,7 +809,7 @@ const jsonLd = {
   class="toast fixed inset-x-4 bottom-24 z-[70] mx-auto flex max-w-sm items-start gap-3 rounded-2xl p-4 shadow-[0_16px_40px_rgba(20,20,20,0.25)]"
   style={`background:${surface}`}
 >
-  <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full" style={`background:${accent}`}>
+  <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full" style={`background:${cta}`}>
     <Icon name="lucide:check" width={16} height={16} class="h-4 w-4 text-[#141414]" />
   </span>
   <div>
@@ -853,7 +873,7 @@ const jsonLd = {
   }
 
   .ba-range:focus-visible {
-    outline: 2px solid #8ba99a;
+    outline: 2px solid #25d366;
     outline-offset: 4px;
   }
 
@@ -862,7 +882,7 @@ const jsonLd = {
   }
 
   .agenda-slot:hover:not([disabled]) {
-    border-color: #8ba99a;
+    border-color: #25d366;
     transform: translateY(-2px);
   }
 
@@ -882,8 +902,17 @@ const jsonLd = {
   }
 
   .agenda-slot[aria-pressed='true'] {
-    background: #8ba99a;
-    border-color: #8ba99a;
+    background: #25d366;
+    border-color: #25d366;
+  }
+
+  .agenda-slot:hover:not([aria-pressed='true']) {
+    border-color: #1fa855;
+  }
+
+  [data-back-to-top]:hover {
+    background: #1fa855;
+    border-color: #1fa855;
   }
 
   .agenda-slot[aria-pressed='true'] .agenda-slot-state {
@@ -892,7 +921,7 @@ const jsonLd = {
 
   [data-agenda-form] select:focus,
   [data-agenda-form] input:focus {
-    border-color: #8ba99a;
+    border-color: #25d366;
   }
 
   .toast {
@@ -909,7 +938,7 @@ const jsonLd = {
   }
 
   [data-subnav-link].is-active {
-    background: #8ba99a;
+    background: #25d366;
     color: #141414 !important;
   }
 
@@ -934,7 +963,7 @@ const jsonLd = {
     var root = document.querySelector('[data-francy]');
     if (!root) return;
 
-    var ACCENT = '#8BA99A';
+    var ACCENT = '#25D366';
 
     document.querySelectorAll<HTMLImageElement>('[data-fallback-img]').forEach(function (img) {
       var hide = function () {
@@ -960,7 +989,6 @@ const jsonLd = {
         b.style.color = on ? '#141414' : '';
       });
     }
-
     function applyFilter(id: string) {
       var visible = 0;
       items.forEach(function (it) {
@@ -1042,6 +1070,7 @@ const jsonLd = {
   }
 
   function setupFrancyNav() {
+    var ACCENT = '#25D366';
     var ids = ['servicios', 'galeria', 'antes-despues', 'productos', 'sobre', 'agenda', 'ubicacion', 'testimonios', 'faq'];
     var links = Array.prototype.slice.call(document.querySelectorAll('[data-subnav-link]')) as HTMLElement[];
     var headerLinks = Array.prototype.slice.call(document.querySelectorAll('.demo-header-nav a[href^="#"]')) as HTMLElement[];
@@ -1056,7 +1085,7 @@ const jsonLd = {
       });
       headerLinks.forEach(function (a) {
         var href = (a.getAttribute('href') || '').replace('#', '');
-        if (href === id) a.style.color = '#8BA99A';
+        if (href === id) a.style.color = ACCENT;
         else a.style.color = '';
       });
     }
